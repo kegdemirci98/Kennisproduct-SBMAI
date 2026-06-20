@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI op de IT-servicedesk — E-learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f3f8;
+  --surface:#ffffff;
+  --sidebar:#12203a;
+  --sidebar2:#1a2f52;
+  --orange:#e8621a;
+  --orange-soft:#fff3ec;
+  --orange-border:#f5c5a3;
+  --teal:#0694a2;
+  --teal-soft:#e8f9fb;
+  --green:#027a48;
+  --green-soft:#e6f4ee;
+  --red:#b91c1c;
+  --red-soft:#fef2f2;
+  --amber:#92400e;
+  --amber-soft:#fffbeb;
+  --text:#1a2638;
+  --muted:#5a6a80;
+  --border:#dce4ef;
+  --shadow:0 2px 8px rgba(18,32,58,.08),0 0 1px rgba(18,32,58,.1);
+  --shadow-lg:0 8px 24px rgba(18,32,58,.12),0 0 1px rgba(18,32,58,.1);
+  --sw:270px;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;min-height:100vh;line-height:1.65;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);background:linear-gradient(160deg,var(--sidebar) 0%,var(--sidebar2) 100%);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;overflow:hidden;z-index:50;}
+.sb-brand{padding:22px 20px 16px;}
+.sb-chip{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:5px;}
+.sb-name{font-size:15px;font-weight:800;color:#f0f4ff;line-height:1.25;}
+.sb-prog-wrap{padding:12px 20px 16px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-prog-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35);font-family:var(--mono);margin-bottom:7px;}
+.sb-prog-track{height:3px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;}
+.sb-prog-fill{height:100%;background:var(--orange);border-radius:99px;transition:width .5s ease;width:0%;}
+.sb-total-time{font-size:11px;color:rgba(255,255,255,.25);text-align:center;padding:8px 20px;font-family:var(--mono);}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 0;}
+.sb-nav::-webkit-scrollbar{width:3px;}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
+.nb{display:flex;align-items:center;gap:11px;padding:10px 18px;cursor:pointer;transition:background .15s;border-left:3px solid transparent;text-decoration:none;}
+.nb:hover{background:rgba(255,255,255,.05);}
+.nb.active{background:rgba(232,98,26,.12);border-left-color:var(--orange);}
+.nb-num{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35);flex-shrink:0;transition:all .2s;}
+.nb.active .nb-num{border-color:var(--orange);color:var(--orange);}
+.nb.done .nb-num{background:var(--green);border-color:var(--green);color:#fff;font-size:13px;}
+.nb-info{flex:1;min-width:0;}
+.nb-eyebrow{font-size:9px;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.1em;display:block;font-family:var(--mono);}
+.nb-label{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.5);display:block;line-height:1.3;}
+.nb.active .nb-label{color:#f0f4ff;}
+.nb-time{font-size:10px;color:rgba(255,255,255,.2);font-family:var(--mono);flex-shrink:0;}
+.nb.active .nb-time{color:var(--orange);}
+.sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.2);font-family:var(--mono);}
+
+/* MAIN */
+#main{margin-left:var(--sw);flex:1;min-height:100vh;}
+.mod{display:none;}
+.mod.active{display:block;animation:fi .3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* MODULE HEADER */
+.mhdr{padding:36px 52px 28px;background:var(--surface);border-bottom:1px solid var(--border);}
+.mhdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;}
+.mhdr-eyebrow{font-size:11px;font-family:var(--mono);color:var(--orange);letter-spacing:.12em;text-transform:uppercase;}
+.mhdr-time-badge{font-size:11px;font-family:var(--mono);color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:4px 12px;flex-shrink:0;}
+.mhdr-title{font-size:30px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:6px;}
+.mhdr-sub{font-size:14.5px;color:var(--muted);}
+.mhdr-goal{margin-top:16px;padding:11px 16px;background:var(--orange-soft);border:1px solid var(--orange-border);border-radius:8px;font-size:13.5px;color:var(--text);display:flex;gap:9px;align-items:flex-start;}
+.mhdr-goal strong{color:var(--orange);flex-shrink:0;}
+
+/* BODY */
+.mbody{padding:40px 52px 96px;max-width:880px;}
+
+/* STORY BOX */
+.story{background:linear-gradient(135deg,#fff8f3,#fff);border:1px solid var(--orange-border);border-left:4px solid var(--orange);border-radius:0 10px 10px 0;padding:20px 22px;margin-bottom:28px;position:relative;}
+.story-tag{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.story p{font-size:14px;color:#4a3728;margin-bottom:0;font-style:italic;}
+.story p:not(:last-child){margin-bottom:8px;}
+.story-char{position:absolute;top:-14px;left:18px;background:white;padding:0 6px;font-size:20px;border-radius:50%;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow);}
+.card.top-orange{border-top:3px solid var(--orange);}
+.card.top-teal{border-top:3px solid var(--teal);}
+.card.top-green{border-top:3px solid var(--green);}
+.card.top-red{border-top:3px solid var(--red);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+
+/* TYPOGRAPHY */
+h2.sh{font-size:20px;font-weight:800;color:var(--text);margin:32px 0 14px;}
+h2.sh:first-child{margin-top:0;}
+h3.ch{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
+p{font-size:14.5px;color:var(--muted);margin-bottom:12px;}
+p:last-child{margin-bottom:0;}
+p strong{color:var(--text);}
+.tag{display:inline-block;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono);margin-bottom:8px;}
+.t-orange{background:var(--orange-soft);color:var(--orange);}
+.t-teal{background:var(--teal-soft);color:var(--teal);}
+.t-green{background:var(--green-soft);color:var(--green);}
+.t-red{background:var(--red-soft);color:var(--red);}
+.t-amber{background:var(--amber-soft);color:var(--amber);}
+.t-gray{background:var(--bg);color:var(--muted);}
+.callout{padding:14px 18px;border-radius:8px;font-size:14px;margin:16px 0;border-left:3px solid;line-height:1.55;}
+.c-orange{background:var(--orange-soft);border-color:var(--orange);color:var(--text);}
+.c-teal{background:var(--teal-soft);border-color:var(--teal);color:var(--text);}
+.c-green{background:var(--green-soft);border-color:var(--green);color:var(--text);}
+.c-amber{background:var(--amber-soft);border-color:#d97706;color:var(--text);}
+
+/* BIG STAT */
+.bigstat{text-align:center;padding:18px 12px;}
+.bigstat .n{font-size:40px;font-weight:800;line-height:1;font-family:var(--font);}
+.bigstat .l{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4;}
+.n-or{color:var(--orange);}
+.n-gr{color:var(--green);}
+.n-tl{color:var(--teal);}
+
+/* FLOW */
+.flow-v{display:flex;flex-direction:column;}
+.frow{display:flex;gap:14px;}
+.fleft{display:flex;flex-direction:column;align-items:center;}
+.fcircle{width:32px;height:32px;border-radius:50%;background:var(--orange-soft);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange);flex-shrink:0;}
+.fline{width:2px;background:var(--border);flex:1;min-height:18px;margin:4px 0;}
+.fbody{padding-bottom:16px;flex:1;}
+.fbody h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.fbody p{font-size:13.5px;margin:0;}
+
+/* COMPARISON BARS */
+.cbar{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.cbar-label{width:100px;font-size:12px;color:var(--muted);font-family:var(--mono);flex-shrink:0;}
+.cbar-track{flex:1;background:var(--bg);border-radius:4px;height:12px;overflow:hidden;}
+.cbar-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.cbar-val{width:46px;text-align:right;font-size:13px;font-weight:700;flex-shrink:0;}
+.f1bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.f1cat{width:136px;font-size:12px;color:var(--muted);flex-shrink:0;}
+.f1track{flex:1;background:var(--bg);border-radius:3px;height:8px;overflow:hidden;}
+.f1fill{height:100%;border-radius:3px;}
+.f1val{width:36px;text-align:right;font-size:12px;font-weight:700;flex-shrink:0;}
+
+/* CATEGORY BADGES */
+.cb{display:inline-block;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;font-family:var(--mono);margin:3px;}
+.hw{background:#dbeafe;color:#1e40af;}.sw{background:#dcfce7;color:#166534;}.ac{background:#fef3c7;color:#854d0e;}.adm{background:#ede9fe;color:#6d28d9;}.pur{background:#fce7f3;color:#9d174d;}.net{background:#ccfbf1;color:#0f766e;}.hr{background:#fee2e2;color:#991b1b;}.misc{background:#f1f5f9;color:#475569;}
+
+/* ILLUSTRATIONS */
+.illus-wrap{background:var(--bg);border-radius:12px;padding:24px;margin-bottom:20px;border:1px solid var(--border);overflow:hidden;}
+.illus-wrap svg{display:block;margin:0 auto;}
+
+/* TICKET CHAOS ANIMATION */
+.ticket-chaos{position:relative;height:180px;background:linear-gradient(135deg,#1a2f52 0%,#12203a 100%);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.tc-desk{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);width:120px;height:6px;background:#4a5568;border-radius:3px;}
+.tc-monitor{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);width:56px;height:42px;background:#2d3748;border-radius:4px;border:2px solid #4a5568;}
+.tc-screen{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);width:50px;height:36px;background:#1a365d;border-radius:2px;display:flex;align-items:center;justify-content:center;}
+.tc-person{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);font-size:26px;z-index:5;}
+.tc-ticket{position:absolute;font-size:12px;background:white;border-radius:5px;padding:4px 8px;font-family:var(--mono);color:#2d3748;box-shadow:0 2px 6px rgba(0,0,0,.3);white-space:nowrap;animation:fly-in 3s ease-in-out infinite;}
+.tc-ticket:nth-child(1){animation-delay:0s;top:12px;left:8%;}
+.tc-ticket:nth-child(2){animation-delay:.5s;top:28px;right:10%;}
+.tc-ticket:nth-child(3){animation-delay:1s;top:8px;left:35%;}
+.tc-ticket:nth-child(4){animation-delay:1.5s;top:44px;left:15%;}
+.tc-ticket:nth-child(5){animation-delay:2s;top:20px;right:20%;}
+.tc-ticket:nth-child(6){animation-delay:2.5s;top:52px;right:5%;}
+.tc-count{position:absolute;top:12px;right:12px;background:var(--orange);color:white;font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+@keyframes fly-in{0%,100%{opacity:.3;transform:translateY(-8px);}50%{opacity:1;transform:translateY(0);}}
+
+/* ROUTING VISUAL */
+.route-visual{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.route-box{border-radius:10px;padding:18px;border:1px solid var(--border);}
+.route-box.bad{background:#fff5f5;border-color:#fca5a5;}
+.route-box.good{background:#f0fdf4;border-color:#86efac;}
+.route-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;font-family:var(--mono);}
+.route-box.bad .route-title{color:var(--red);}
+.route-box.good .route-title{color:var(--green);}
+.route-step{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;}
+.route-arrow{color:var(--muted);font-size:12px;}
+.route-badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;}
+.route-badge.wrong{background:#fee2e2;color:var(--red);}
+.route-badge.right{background:#dcfce7;color:var(--green);}
+
+/* TRAIN VISUAL */
+.train-pipe{display:flex;align-items:center;gap:0;margin:20px 0;overflow:hidden;}
+.tp-box{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;flex:1;text-align:center;box-shadow:var(--shadow);}
+.tp-icon{font-size:24px;margin-bottom:4px;}
+.tp-label{font-size:12px;font-weight:700;color:var(--text);}
+.tp-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.tp-arrow{font-size:20px;color:var(--border);padding:0 6px;flex-shrink:0;}
+
+/* SIMULATION */
+.sim-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-lg);}
+.sim-titlebar{background:#1a2638;padding:10px 18px;display:flex;align-items:center;gap:8px;}
+.sim-dots{display:flex;gap:5px;}
+.sim-dot{width:10px;height:10px;border-radius:50%;}
+.sim-tbname{font-size:11px;color:#64748b;font-family:var(--mono);margin-left:6px;}
+.sim-body{padding:24px;}
+.sim-inlabel{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between;}
+.sim-ta{width:100%;min-height:86px;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-family:var(--font);font-size:14px;color:var(--text);resize:vertical;outline:none;transition:border .2s;background:#fafbfc;}
+.sim-ta:focus{border-color:var(--orange);}
+.sim-ex{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px;}
+.sim-chip{font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--border);cursor:pointer;color:var(--muted);transition:all .15s;font-family:var(--font);}
+.sim-chip:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-soft);}
+.btn-classify{width:100%;background:var(--orange);color:white;border:none;border-radius:8px;padding:11px 0;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .15s;margin-top:2px;}
+.btn-classify:hover{background:#c94f10;}
+.btn-classify:disabled{background:#cbd5e1;cursor:not-allowed;}
+.sim-res{margin-top:22px;border-top:1px solid var(--border);padding-top:22px;display:none;}
+.res-main{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:10px;margin-bottom:18px;border:1.5px solid;}
+.res-icon{font-size:28px;flex-shrink:0;}
+.res-cat{font-size:22px;font-weight:800;}
+.res-conf{font-size:12px;color:var(--muted);margin-top:3px;}
+.probs-title{font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px;}
+.prob-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.prob-cat{width:152px;font-size:12px;color:var(--muted);flex-shrink:0;}
+.prob-track{flex:1;background:var(--bg);border-radius:3px;height:8px;overflow:hidden;}
+.prob-bar{height:100%;border-radius:3px;background:var(--border);transition:width .8s ease;}
+.prob-bar.win{background:var(--green);}
+.prob-val{width:38px;text-align:right;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.prob-val.win{color:var(--green);}
+.lime-wrap{margin-top:18px;}
+.lime-title{font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.lime-txt{font-size:15px;line-height:2.1;padding:14px 16px;background:#fafbfc;border:1px solid var(--border);border-radius:8px;font-family:var(--font);}
+.lime-txt mark{background:rgba(5,150,105,.18);color:var(--green);font-weight:700;border-radius:3px;padding:1px 4px;}
+.sim-note{font-size:12px;color:var(--muted);margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:6px;border-left:2px solid var(--border);}
+
+/* QUIZ */
+.quiz-outer{max-width:680px;}
+.qprog{height:4px;background:var(--border);border-radius:99px;margin-bottom:28px;overflow:hidden;}
+.qprog-fill{height:100%;background:var(--orange);border-radius:99px;transition:width .4s ease;}
+.qq{display:none;animation:fi .25s ease;}
+.qq.active{display:block;}
+.qnum{font-size:11px;color:var(--orange);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.qtxt{font-size:18px;font-weight:800;color:var(--text);margin-bottom:20px;line-height:1.4;}
+.qopts{display:flex;flex-direction:column;gap:10px;}
+.qopt{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .15s;background:var(--surface);}
+.qopt:hover:not(.qanswered){border-color:var(--orange);background:var(--orange-soft);}
+.qopt.qcorrect{border-color:var(--green);background:var(--green-soft);}
+.qopt.qwrong{border-color:var(--red);background:var(--red-soft);}
+.qopt.qdisabled{cursor:default;}
+.qletter{width:27px;height:27px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .15s;}
+.qopt:hover:not(.qanswered) .qletter{border-color:var(--orange);color:var(--orange);background:var(--orange-soft);}
+.qopt.qcorrect .qletter{border-color:var(--green);background:var(--green);color:white;}
+.qopt.qwrong .qletter{border-color:var(--red);background:var(--red);color:white;}
+.qopttext{font-size:14px;color:var(--text);line-height:1.45;padding-top:3px;}
+.qfb{margin-top:14px;padding:13px 16px;border-radius:8px;font-size:13.5px;display:none;line-height:1.5;border-left:3px solid;}
+.qfb.fbok{background:var(--green-soft);border-color:var(--green);color:var(--text);}
+.qfb.fbwrong{background:var(--red-soft);border-color:var(--red);color:var(--text);}
+.btn-nxtq{margin-top:18px;background:var(--text);color:white;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;display:none;transition:background .15s;}
+.btn-nxtq:hover{background:#334155;}
+
+/* QUIZ RESULT */
+.qresult{display:none;animation:fi .4s ease;}
+.qscore-circle{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 20px;border:3px solid;}
+.qsnum{font-size:30px;font-weight:800;line-height:1;}
+.qsdenom{font-size:12px;color:var(--muted);}
+.qrtitle{font-family:var(--font);font-size:22px;font-weight:800;text-align:center;margin-bottom:8px;}
+.qrsub{font-size:14.5px;color:var(--muted);text-align:center;max-width:420px;margin:0 auto 28px;}
+
+/* QUIZ REVIEW */
+.review-wrap{margin-top:28px;border-top:1px solid var(--border);padding-top:24px;}
+.review-title{font-size:16px;font-weight:800;margin-bottom:16px;}
+.rev-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);}
+.rev-item:last-child{border-bottom:none;}
+.rev-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+.rev-q{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.rev-correct-ans{font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px;}
+.rev-exp{font-size:13px;color:var(--muted);}
+.btn-retry{margin-top:20px;background:transparent;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:9px 20px;font-size:13px;font-family:var(--font);cursor:pointer;transition:all .15s;}
+.btn-retry:hover{border-color:var(--orange);color:var(--orange);}
+
+/* VALIDATION */
+.val-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-top:30px;box-shadow:var(--shadow);display:none;}
+.val-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.val-title{font-size:15px;font-weight:800;}
+.val-row{display:flex;gap:12px;margin-bottom:9px;font-size:13.5px;}
+.val-key{font-weight:700;color:var(--text);min-width:140px;flex-shrink:0;}
+.val-val{color:var(--muted);}
+
+/* FOOTER NAV */
+.mfooter{position:fixed;bottom:0;left:var(--sw);right:0;background:rgba(255,255,255,.96);border-top:1px solid var(--border);padding:13px 52px;display:flex;justify-content:space-between;align-items:center;z-index:40;backdrop-filter:blur(6px);}
+.btn-n{background:var(--orange);color:white;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;}
+.btn-n:hover{background:#c94f10;}
+.btn-n:disabled{background:#cbd5e1;cursor:not-allowed;}
+.btn-p{background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:8px;padding:10px 18px;font-size:14px;font-family:var(--font);cursor:pointer;transition:all .15s;}
+.btn-p:hover{border-color:var(--orange);color:var(--orange);}
+.btn-p:disabled{opacity:.3;cursor:not-allowed;}
+.footer-mid{font-size:12px;color:var(--muted);font-family:var(--mono);}
+
+/* WELCOME SCREEN */
+#mod-0 .welcome-hero{background:linear-gradient(135deg,#12203a 0%,#1a3a6a 100%);padding:52px 52px 48px;color:white;}
+#mod-0 .wh-label{font-size:11px;font-family:var(--mono);letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;}
+#mod-0 .wh-title{font-size:38px;font-weight:800;line-height:1.15;margin-bottom:10px;}
+#mod-0 .wh-title span{color:var(--orange);}
+#mod-0 .wh-sub{font-size:16px;color:rgba(255,255,255,.65);max-width:520px;line-height:1.6;margin-bottom:0;}
+#mod-0 .welcome-body{padding:40px 52px 100px;max-width:880px;}
+#mod-0 .wmod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px;}
+#mod-0 .wmod-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow);}
+#mod-0 .wmod-n{font-size:11px;font-family:var(--mono);color:var(--orange);margin-bottom:5px;}
+#mod-0 .wmod-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+#mod-0 .wmod-time{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+#mod-0 .total-time{background:var(--orange-soft);border:1px solid var(--orange-border);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+#mod-0 .tt-icon{font-size:28px;}
+#mod-0 .tt-text{font-size:15px;font-weight:700;color:var(--text);}
+#mod-0 .tt-sub{font-size:13px;color:var(--muted);}
+.btn-start{background:var(--orange);color:white;border:none;border-radius:9px;padding:14px 32px;font-size:16px;font-weight:800;font-family:var(--font);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:10px;}
+.btn-start:hover{background:#c94f10;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,98,26,.35);}
+
+/* ETHICS CARDS */
+.eth-card{display:flex;gap:16px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;box-shadow:var(--shadow);}
+.eth-icon{font-size:26px;flex-shrink:0;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--bg);}
+.eth-body h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.eth-body p{font-size:13.5px;margin:0;}
+
+/* WELCOME PERSON */
+.lena-intro{background:linear-gradient(135deg,#fff8f3,#fffbf8);border:1px solid var(--orange-border);border-radius:12px;padding:24px;display:flex;gap:18px;align-items:flex-start;margin-bottom:24px;}
+.lena-avatar{width:52px;height:52px;background:linear-gradient(135deg,#e8621a,#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.lena-bubble h4{font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px;}
+.lena-bubble p{font-size:13.5px;color:var(--muted);margin:0;font-style:italic;}
+
+@media(max-width:720px){
+  :root{--sw:0px;}
+  #sb{display:none;}
+  #main{margin-left:0;}
+  .mbody,.welcome-body{padding:24px 22px 96px;}
+  .mhdr{padding:24px 22px 20px;}
+  .grid2,.grid3,.wmod-grid{grid-template-columns:1fr;}
+  .route-visual,.train-pipe{flex-direction:column;}
+  .mfooter{left:0;padding:13px 22px;}
+  #mod-0 .welcome-hero{padding:36px 24px 32px;}
+  #mod-0 .wh-title{font-size:26px;}
+  #mod-0 .welcome-body{padding:28px 22px 100px;}
+}
+</style>
+</head>
+<body>
+
+<aside id="sb">
+  <div class="sb-brand">
+    <div class="sb-chip">E-learning · BIM Groep 10</div>
+    <div class="sb-name">AI op de IT-servicedesk</div>
+  </div>
+  <div class="sb-prog-wrap">
+    <div class="sb-prog-label"><span>Voortgang</span><span id="ptxt">0 / 6</span></div>
+    <div class="sb-prog-track"><div class="sb-prog-fill" id="pfill"></div></div>
+  </div>
+  <div class="sb-total-time">Totale tijd: circa 30 minuten</div>
+  <nav class="sb-nav">
+    <div class="nb active" data-m="0" onclick="goTo(0)">
+      <div class="nb-num" id="nn-0">&#9654;</div>
+      <div class="nb-info"><span class="nb-eyebrow">Welkom</span><span class="nb-label">Start hier</span></div>
+      <span class="nb-time"></span>
+    </div>
+    <div class="nb" data-m="1" onclick="goTo(1)">
+      <div class="nb-num" id="nn-1">1</div>
+      <div class="nb-info"><span class="nb-eyebrow">Startpunt</span><span class="nb-label">Dag op de servicedesk</span></div>
+      <span class="nb-time">4 min</span>
+    </div>
+    <div class="nb" data-m="2" onclick="goTo(2)">
+      <div class="nb-num" id="nn-2">2</div>
+      <div class="nb-info"><span class="nb-eyebrow">De oplossing</span><span class="nb-label">Hoe helpt de AI?</span></div>
+      <span class="nb-time">5 min</span>
+    </div>
+    <div class="nb" data-m="3" onclick="goTo(3)">
+      <div class="nb-num" id="nn-3">3</div>
+      <div class="nb-info"><span class="nb-eyebrow">Achter de schermen</span><span class="nb-label">Hoe is het gebouwd?</span></div>
+      <span class="nb-time">5 min</span>
+    </div>
+    <div class="nb" data-m="4" onclick="goTo(4)">
+      <div class="nb-num" id="nn-4">4</div>
+      <div class="nb-info"><span class="nb-eyebrow">Doe het zelf</span><span class="nb-label">Probeer het zelf</span></div>
+      <span class="nb-time">5 min</span>
+    </div>
+    <div class="nb" data-m="5" onclick="goTo(5)">
+      <div class="nb-num" id="nn-5">5</div>
+      <div class="nb-info"><span class="nb-eyebrow">Verantwoord gebruik</span><span class="nb-label">Ethiek en hoe ver dit reikt</span></div>
+      <span class="nb-time">5 min</span>
+    </div>
+    <div class="nb" data-m="6" onclick="goTo(6)">
+      <div class="nb-num" id="nn-6">6</div>
+      <div class="nb-info"><span class="nb-eyebrow">Afsluiting</span><span class="nb-label">Kennischeck</span></div>
+      <span class="nb-time">5 min</span>
+    </div>
+  </nav>
+  <div class="sb-foot">Ertugrul Demirci · DistilBERT + LIME</div>
+</aside>
+
+<main id="main">
+
+<!-- WELKOMSTSCHERM -->
+<section class="mod active" id="mod-0">
+  <div class="welcome-hero">
+    <div class="wh-label">IT-Servicedesk en kunstmatige intelligentie</div>
+    <div class="wh-title">Hoe AI jouw<br>werkdag verlicht</div>
+    <div class="wh-sub">Een korte e-learning over automatisch sorteren van IT-tickets. Geen technische kennis nodig. Gewoon nieuwsgierig zijn is genoeg.</div>
+  </div>
+  <div class="welcome-body">
+
+    <div class="lena-intro">
+      <div class="lena-avatar">👩‍💻</div>
+      <div class="lena-bubble">
+        <h4>Maak kennis met Lena</h4>
+        <p>"Ik werk drie jaar op de IT-servicedesk van een middelgroot bedrijf. Elke dag begin ik mijn dienst met dezelfde vraag: hoe kom ik vandaag door de ticketstapel heen? In deze e-learning volg je mijn dag."</p>
+      </div>
+    </div>
+
+    <div class="total-time">
+      <div class="tt-icon">⏱</div>
+      <div>
+        <div class="tt-text">Totale tijd: ongeveer 30 minuten</div>
+        <div class="tt-sub">Je kunt stoppen en later verdergaan. Je voortgang wordt in de zijbalk bijgehouden.</div>
+      </div>
+    </div>
+
+    <div class="wmod-grid">
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 1</div><div class="wmod-name">Dag op de servicedesk</div><div class="wmod-time">⏱ 4 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 2</div><div class="wmod-name">Hoe helpt de AI? + DistilBERT</div><div class="wmod-time">⏱ 5 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 3</div><div class="wmod-name">Hoe is het gebouwd?</div><div class="wmod-time">⏱ 5 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 4</div><div class="wmod-name">Probeer het zelf</div><div class="wmod-time">⏱ 5 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 5</div><div class="wmod-name">Vertrouwen, ethiek en toekomst</div><div class="wmod-time">⏱ 5 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 6</div><div class="wmod-name">Kennischeck</div><div class="wmod-time">⏱ 5 minuten</div></div>
+    </div>
+
+    <button class="btn-start" onclick="goTo(1)">Begin de e-learning <span>&#8594;</span></button>
+  </div>
+</section>
+
+<!-- MODULE 1: DAG OP DE SERVICEDESK -->
+<section class="mod" id="mod-1">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 1 van 6</div>
+        <div class="mhdr-title">Dag op de servicedesk</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 4 minuten</div>
+    </div>
+    <div class="mhdr-sub">Het probleem dat we gaan oplossen.</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> waarom IT-servicedesks vastlopen bij het verwerken van tickets, en hoe veel tijd dat eigenlijk kost.</div>
+  </div>
+  <div class="mbody">
+
+    <!-- Lena profile card -->
+    <div style="display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:24px;box-shadow:var(--shadow);">
+      <div style="width:54px;height:54px;background:linear-gradient(135deg,#e8621a,#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">👩‍💻</div>
+      <div>
+        <div style="font-size:10px;font-family:var(--mono);color:var(--orange);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Wie is Lena?</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;">Lena van der Berg, servicedesk-medewerker</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span style="font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px 11px;color:var(--muted);">🏢 LogiPro BV, Rotterdam</span>
+          <span style="font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px 11px;color:var(--muted);">👥 280 medewerkers</span>
+          <span style="font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px 11px;color:var(--muted);">📦 Distributie en logistiek</span>
+          <span style="font-size:12px;background:var(--orange-soft);border:1px solid var(--orange-border);border-radius:20px;padding:3px 11px;color:var(--orange);">💻 IT-team: 4 personen voor heel het bedrijf</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout c-teal" style="margin-bottom:24px;">
+      <strong>Waarom dit bedrijf?</strong> LogiPro is een typisch middelgroot bedrijf (MKB). Grote bedrijven zoals Bol.com, NS of ING hebben al jarenlang geautomatiseerde ticketsystemen met slim routeren. Maar voor de meeste MKB-bedrijven, ziekenhuizen, gemeenten en onderwijsinstellingen is dat nog steeds handmatig werk. Dat is precies de situatie die Lena herkent.
+    </div>
+
+    <div class="story">
+      <div class="story-char">👩‍💻</div>
+      <div class="story-tag">Maandagochtend, 08:47</div>
+      <p>"Ik zet mijn computer aan en zie meteen 147 nieuwe tickets. Er is vannacht een netwerkstoring geweest op de tweede verdieping. Iedereen heeft een melding gestuurd. Sommige over het netwerk, sommige over VPN, en een paar gewoon over hun laptop die het plotseling niet meer doet."</p>
+      <p>"Ik moet ze allemaal handmatig doorlezen en in de juiste categorie zetten. Voor ik ook maar één probleem heb opgelost, ben ik een uur kwijt aan sorteren."</p>
+    </div>
+
+    <!-- Ticket chaos illustration -->
+    <div class="ticket-chaos">
+      <div class="tc-count" id="tc-count">0 tickets</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 VPN doet het niet</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 Laptop start niet op</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 Kan niet inloggen</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 Printer doet niets</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 Toegang geweigerd</div>
+      <div class="tc-ticket" style="font-size:11px;">📋 Outlook crasht</div>
+      <div class="tc-monitor"></div>
+      <div class="tc-desk"></div>
+      <div class="tc-person">😰</div>
+    </div>
+
+    <h2 class="sh">Zo gaat het nu op de meeste servicedesks</h2>
+    <div class="flow-v">
+      <div class="frow">
+        <div class="fleft"><div class="fcircle">1</div><div class="fline"></div></div>
+        <div class="fbody"><h4>Een medewerker stuurt een melding in</h4><p>Ze schrijven in gewone taal wat er mis is. "Mijn laptop start niet op" of "Ik kan niet inloggen op het systeem."</p></div>
+      </div>
+      <div class="frow">
+        <div class="fleft"><div class="fcircle">2</div><div class="fline"></div></div>
+        <div class="fbody"><h4>Lena en haar collega's lezen alles handmatig</h4><p>Ze kiezen zelf een categorie: Hardware, Software, Netwerk, Toegang. Maar het is niet altijd duidelijk. Bij twijfel kiezen ze iets, en soms is dat de verkeerde keuze.</p></div>
+      </div>
+      <div class="frow">
+        <div class="fleft"><div class="fcircle">3</div><div class="fline"></div></div>
+        <div class="fbody"><h4>Ticket belandt bij de verkeerde afdeling</h4><p>De netwerkafdeling krijgt een ticket dat eigenlijk voor de softwareafdeling was. Die stuurt het door. Nog meer vertraging.</p></div>
+      </div>
+      <div class="frow">
+        <div class="fleft"><div class="fcircle">!</div></div>
+        <div class="fbody"><h4>Dit herhaalt zich 200 keer per dag bij LogiPro</h4><p>Elke werkdag opnieuw. Dat telt op.</p></div>
+      </div>
+    </div>
+
+    <h2 class="sh">Hoeveel tijd kost dit eigenlijk?</h2>
+    <div class="grid3">
+      <div class="card" style="margin:0;"><div class="bigstat"><div class="n n-or">80</div><div class="l">minuten per dag kwijt aan sorteren per persoon</div></div></div>
+      <div class="card" style="margin:0;"><div class="bigstat"><div class="n" style="color:var(--amber);">1 op 8</div><div class="l">tickets belandt als eerste bij de verkeerde afdeling</div></div></div>
+      <div class="card" style="margin:0;"><div class="bigstat"><div class="n n-tl">&lt; 1s</div><div class="l">verwerkingstijd per ticket als AI het doet</div></div></div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:12px 16px;font-size:12.5px;color:var(--muted);margin-bottom:8px;border:1px solid var(--border);">
+      <strong style="color:var(--text);">Waar komen deze cijfers vandaan?</strong> Bij 40 tickets per persoon per dag en 2 minuten per ticket kom je op 80 minuten uit. Voor een team van 4 is dat ruim 5 uur per dag aan sorteren. De misrouteringspercentages zijn gebaseerd op brancheonderzoek naar ITSM-processen (HDI, Service Desk Institute), waarbij handmatige categorisering gemiddeld 10 tot 15 procent fouten oplevert bij de eerste sortering.
+    </div>
+
+    <h2 class="sh">Dit is misschien dichter bij jou dan je denkt</h2>
+    <div class="callout c-orange" style="margin-bottom:20px;">
+      Heb je weleens een IT-ticket ingestuurd en daarna langer gewacht dan verwacht? Misschien is het ticket bij de verkeerde afdeling terechtgekomen en moest iemand het doorsturen. Of iemand las het verkeerd en zette het in de verkeerde wachtrij. Dat is precies het probleem dat Lena elke dag heeft.
+    </div>
+
+    <h2 class="sh">Herken je dit soort situaties?</h2>
+    <div class="grid3" style="margin-bottom:8px;">
+      <div class="card top-orange" style="margin:0;">
+        <div style="font-size:28px;margin-bottom:10px;">🏥</div>
+        <h3 class="ch" style="font-size:13.5px;">Ziekenhuis</h3>
+        <p style="font-size:13px;">Een arts stuurt een melding: "Ik kan niet bij de patiëntendossiers." Het ticket belandt bij de hardwareafdeling in plaats van bij het toegangsbeheer. De arts wacht. De patiënt ook.</p>
+      </div>
+      <div class="card top-teal" style="margin:0;">
+        <div style="font-size:28px;margin-bottom:10px;">🏫</div>
+        <h3 class="ch" style="font-size:13.5px;">Onderwijsinstelling</h3>
+        <p style="font-size:13px;">Een docent meldt dat het smartboard niet werkt voor de les van 9 uur. Het ticket komt pas om 10 uur bij de juiste persoon aan. De les is al lang voorbij.</p>
+      </div>
+      <div class="card top-green" style="margin:0;">
+        <div style="font-size:28px;margin-bottom:10px;">🏛️</div>
+        <h3 class="ch" style="font-size:13.5px;">Gemeente</h3>
+        <p style="font-size:13px;">Een ambtenaar kan niet inloggen op het burgersysteem. Het ticket gaat naar software, maar het is een wachtwoordprobleem. Een uur later is het doorgestuurd, maar de burger wacht al.</p>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0 16px;">Dit zijn geen verzonnen situaties. Dit is de dagelijkse realiteit bij duizenden organisaties in Nederland.</div>
+
+  </div>
+</section>
+
+<!-- MODULE 2: HOE HELPT DE AI? -->
+<section class="mod" id="mod-2">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 2 van 6</div>
+        <div class="mhdr-title">Hoe helpt de AI?</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+    </div>
+    <div class="mhdr-sub">Van handmatig sorteren naar automatische suggesties. Plus: wat is DistilBERT eigenlijk?</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> wat het AI-systeem precies doet, waarom het beter werkt dan zoeken op losse woorden, wat DistilBERT is, en welke 8 soorten tickets het herkent.</div>
+  </div>
+  <div class="mbody">
+
+    <div class="story">
+      <div class="story-char">👩‍💻</div>
+      <div class="story-tag">Lena stelt zich iets voor</div>
+      <p>"Stel je voor dat ik een assistent zou hebben die elk binnenkomend ticket in een oogwenk leest en zegt: 'Dit is waarschijnlijk een Netwerk-probleem.' Ik hoef het alleen nog maar te bevestigen of aan te passen. Dat zou mij minstens een uur per dag schelen."</p>
+      <p>"Dat is precies wat dit systeem doet."</p>
+    </div>
+
+    <h2 class="sh">Wat doet het systeem precies?</h2>
+    <div class="callout c-teal">
+      <strong>In gewone taal:</strong> het systeem leest een binnenkomend ticket, kiest automatisch de meest passende categorie, en laat daarna zien welke woorden die keuze hebben bepaald. Lena bevestigt de keuze of past hem aan. Het systeem beslist nooit zelfstandig.
+    </div>
+
+    <h2 class="sh">Het verschil met gewoon zoeken op woorden</h2>
+
+    <!-- SVG illustration: context vs keyword -->
+    <div class="illus-wrap" style="padding:20px;">
+      <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;">
+        <!-- Left column: keyword -->
+        <rect x="10" y="10" width="290" height="180" rx="10" fill="#fff5f5" stroke="#fca5a5" stroke-width="1.5"/>
+        <text x="155" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#b91c1c" font-weight="700" letter-spacing="1">TREFWOORDZOEKEN</text>
+        <!-- Ticket 1 -->
+        <rect x="22" y="44" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+        <text x="32" y="60" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook crasht bij het openen"</text>
+        <text x="32" y="74" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Woord gevonden: Outlook</text>
+        <rect x="220" y="50" width="58" height="20" rx="4" fill="#dbeafe"/>
+        <text x="249" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
+        <!-- Ticket 2 -->
+        <rect x="22" y="88" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+        <text x="32" y="104" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook: toegang geweigerd"</text>
+        <text x="32" y="118" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Woord gevonden: Outlook</text>
+        <rect x="220" y="94" width="58" height="20" rx="4" fill="#dbeafe"/>
+        <text x="249" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
+        <text x="155" y="160" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="12" fill="#b91c1c">Ticket 2 had Access moeten zijn.</text>
+        <text x="155" y="177" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#b91c1c">Maar het systeem zag alleen "Outlook".</text>
+        <!-- Right column: AI -->
+        <rect x="340" y="10" width="290" height="180" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+        <text x="485" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#027a48" font-weight="700" letter-spacing="1">AI-MODEL</text>
+        <rect x="352" y="44" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+        <text x="362" y="60" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook crasht bij het openen"</text>
+        <text x="362" y="74" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Begrijpt: crash = programma</text>
+        <rect x="548" y="50" width="58" height="20" rx="4" fill="#dbeafe"/>
+        <text x="577" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
+        <rect x="352" y="88" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+        <text x="362" y="104" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook: toegang geweigerd"</text>
+        <text x="362" y="118" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Begrijpt: toegang geweigerd = access</text>
+        <rect x="548" y="94" width="58" height="20" rx="4" fill="#fef3c7"/>
+        <text x="577" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#854d0e" font-weight="700">ACCESS</text>
+        <text x="485" y="160" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="12" fill="#027a48">Beide tickets correct gesorteerd.</text>
+        <text x="485" y="177" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#027a48">Het model snapt de betekenis van de zin.</text>
+      </svg>
+    </div>
+
+    <h2 class="sh">De 8 soorten tickets die het systeem herkent</h2>
+    <div class="card">
+      <p style="margin-bottom:14px;">Elk ticket krijgt precies een van deze labels:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span class="cb hw">🖥 Hardware</span>
+        <span class="cb sw">💾 Software</span>
+        <span class="cb ac">🔑 Toegang (Access)</span>
+        <span class="cb adm">👤 Beheerdersrechten</span>
+        <span class="cb pur">🛒 Aankoop (Purchase)</span>
+        <span class="cb net">🌐 Netwerk</span>
+        <span class="cb hr">📋 HR</span>
+        <span class="cb misc">📁 Overig</span>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:7px;">
+        <div style="font-size:13px;color:var(--muted);">
+          <strong style="color:var(--text);">Voorbeeld.</strong> "Mijn collega heeft een nieuwe laptop nodig voor haar thuiswerkplek" gaat naar <span class="cb hw" style="margin:0 3px;">Hardware</span>. "Ik wil graag een licentie aanvragen voor Adobe" gaat naar <span class="cb pur" style="margin:0 3px;">Aankoop</span>. De AI ziet het verschil, ook als jij het snel intypt.
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sh">Wat verandert er voor Lena?</h2>
+    <div class="route-visual">
+      <div class="route-box bad">
+        <div class="route-title">Zonder AI</div>
+        <div class="route-step">📋 Ticket binnenkomt</div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step">👩‍💻 Lena leest en sorteert <span class="route-badge wrong">2 min</span></div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step">🤔 Keuze soms fout</div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step">↩ Doorgestuurd, nieuwe vertraging</div>
+      </div>
+      <div class="route-box good">
+        <div class="route-title">Met AI</div>
+        <div class="route-step">📋 Ticket binnenkomt</div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step">🤖 AI stelt categorie voor <span class="route-badge right">&lt; 1s</span></div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step">👩‍💻 Lena bevestigt of past aan</div>
+        <div class="route-step">&#8595;</div>
+        <div class="route-step" style="color:var(--green);">&#10003; Direct bij de juiste afdeling</div>
+      </div>
+    </div>
+
+    <div class="callout c-amber">
+      <strong>Belangrijk om te weten:</strong> Lena houdt altijd de eindverantwoordelijkheid. Het systeem doet een voorstel. Lena beslist. Dat is een bewuste keuze in hoe het systeem is gebouwd.
+    </div>
+
+    <h2 class="sh">Maar wat is dat model eigenlijk? Maak kennis met DistilBERT</h2>
+    <div class="card" style="background:linear-gradient(135deg,#f0f9ff,#fff);border-color:#bae6fd;margin-bottom:16px;">
+      <div class="tag t-teal">De techniek in gewone taal</div>
+      <h3 class="ch">Denk aan een heel belezen collega</h3>
+      <p>Stel je een nieuwe collega voor. Voordat hij bij LogiPro begon, heeft hij drie jaar lang niets anders gedaan dan lezen. Niet alleen een paar boeken, maar miljarden zinnen. Nieuwsartikelen, handleidingen, websites, chats. Zijn taalgevoel is daardoor uitstekend geworden.</p>
+      <p>Hij begrijpt nuance. Hij weet dat "Outlook crasht" iets anders betekent dan "Outlook: toegang geweigerd", ook al staat het woord "Outlook" in beide zinnen. Hij snapt context.</p>
+      <p>Daarna stuurt je hem naar een cursus van drie weken met 47.837 ingevulde IT-tickets, elk met het juiste antwoord erbij. Na die cursus is hij heel goed in IT-tickets sorteren.</p>
+      <p><strong>Dat is DistilBERT.</strong> Een taalmodel dat eerst heel veel taal heeft verwerkt, en daarna specifiek is bijgeleerd op IT-tickets.</p>
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="card" style="margin:0;">
+        <div style="font-size:24px;margin-bottom:8px;">&#128218;</div>
+        <h3 class="ch" style="font-size:13.5px;">Wat betekent "BERT"?</h3>
+        <p style="font-size:13px;">BERT is een taalmodel van Google, getraind op een enorme hoeveelheid tekst. Het leest elke zin van twee kanten tegelijk, zodat het begrijpt hoe woorden met elkaar samenhangen. "Ik ga naar de bank" en "De bank staat in de tuin" voelen daardoor anders.</p>
+      </div>
+      <div class="card" style="margin:0;">
+        <div style="font-size:24px;margin-bottom:8px;">&#9889;</div>
+        <h3 class="ch" style="font-size:13.5px;">Wat betekent "Distil"?</h3>
+        <p style="font-size:13px;">"Distil" betekent gedestilleerd, ofwel samengeperst. DistilBERT is een compactere versie van het originele model. Het is 40 procent kleiner maar behoudt ruim 97 procent van de prestaties. Sneller, lichter, bijna even slim.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:18px 20px;">
+      <div style="font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:12px;">Hoe het leerproces werkt</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;">
+        <div style="flex:1;min-width:130px;text-align:center;padding:14px 10px;background:white;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:22px;margin-bottom:6px;">&#127758;</div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:4px;">Stap 1</div>
+          <div style="font-size:12px;color:var(--muted);">Miljarden zinnen lezen zodat het model taal begrijpt</div>
+        </div>
+        <div style="align-self:center;color:var(--border);font-size:18px;padding:0 4px;">&#8594;</div>
+        <div style="flex:1;min-width:130px;text-align:center;padding:14px 10px;background:white;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:22px;margin-bottom:6px;">&#127891;</div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:4px;">Stap 2</div>
+          <div style="font-size:12px;color:var(--muted);">47.837 IT-tickets bestuderen met de juiste categorie erbij</div>
+        </div>
+        <div style="align-self:center;color:var(--border);font-size:18px;padding:0 4px;">&#8594;</div>
+        <div style="flex:1;min-width:130px;text-align:center;padding:14px 10px;background:white;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:22px;margin-bottom:6px;">&#127775;</div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:4px;">Stap 3</div>
+          <div style="font-size:12px;color:var(--muted);">Het model kan nieuwe tickets sorteren die het nooit eerder heeft gezien</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODULE 3: HOE IS HET GEBOUWD? -->
+<section class="mod" id="mod-3">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 3 van 6</div>
+        <div class="mhdr-title">Hoe is het gebouwd?</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+    </div>
+    <div class="mhdr-sub">Trainen, keuzes maken en resultaten eerlijk beoordelen.</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> hoe het model heeft leren sorteren, welke bewuste keuzes er zijn gemaakt en wat de resultaten precies betekenen.</div>
+  </div>
+  <div class="mbody">
+
+    <div class="story">
+      <div class="story-char">👩‍💻</div>
+      <div class="story-tag">Lena vraagt door</div>
+      <p>"Maar hoe weet die AI dan wat Hardware is en wat Software? Dat heeft toch iemand aan hem uitgelegd?"</p>
+      <p>"Klopt, maar niet door het systeem regels te geven. Het model heeft geleerd door heel veel voorbeelden te zien."</p>
+    </div>
+
+    <!-- Training pipeline illustration -->
+    <div class="illus-wrap">
+      <div class="train-pipe" style="display:flex;align-items:center;gap:8px;">
+        <div class="tp-box">
+          <div class="tp-icon">📚</div>
+          <div class="tp-label">47.837 tickets</div>
+          <div class="tp-sub">Met bijbehorend label</div>
+        </div>
+        <div class="tp-arrow">&#8594;</div>
+        <div class="tp-box" style="background:var(--orange-soft);border-color:var(--orange-border);">
+          <div class="tp-icon">🧠</div>
+          <div class="tp-label">Het model leert</div>
+          <div class="tp-sub">Verbanden zien</div>
+        </div>
+        <div class="tp-arrow">&#8594;</div>
+        <div class="tp-box" style="background:var(--green-soft);border-color:#86efac;">
+          <div class="tp-icon">✅</div>
+          <div class="tp-label">Kan sorteren</div>
+          <div class="tp-sub">Op nieuwe tickets</div>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:13px;margin-top:14px;margin-bottom:0;">Stel je een leerling voor die 47.837 ingevulde oefenbladen krijgt. Na al die voorbeelden weet de leerling zelf hoe hij nieuwe vragen aanpakt.</p>
+    </div>
+
+    <h2 class="sh">Waar komen die 47.837 tickets vandaan?</h2>
+    <div class="card">
+      <div class="tag t-orange">Dataset</div>
+      <h3 class="ch">Echte IT-tickets, openbaar beschikbaar</h3>
+      <p>De tickets komen van een platform waar onderzoekers datasets delen. Ze zijn geanonimiseerd, dus er staan geen namen of bedrijfsinformatie in. Elk ticket heeft een tekst en een label. Die combinatie is de les voor het model.</p>
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:14px;font-family:var(--mono);font-size:12px;margin-top:12px;overflow-x:auto;">
+        <div style="color:var(--orange);font-size:10px;letter-spacing:.08em;margin-bottom:8px;">VOORBEELD UIT DE DATASET</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 14px;color:var(--muted);">
+          <span style="color:var(--teal);">tekst</span><span>"Laptop scherm flickert en wordt zwart tijdens werk"</span>
+          <span style="color:var(--teal);">label</span><span style="color:var(--green);">Hardware</span>
+          <span style="color:var(--teal);">tekst</span><span>"VPN verbinding valt elke 10 minuten weg"</span>
+          <span style="color:var(--teal);">label</span><span style="color:var(--teal);">Network</span>
+          <span style="color:var(--teal);">tekst</span><span>"Licentie aanvragen voor Adobe Acrobat, 3 stuks"</span>
+          <span style="color:var(--teal);">label</span><span style="color:#9d174d;">Purchase</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sh">Drie bewuste keuzes die de kwaliteit bepalen</h2>
+
+    <div class="card top-orange">
+      <div class="tag t-orange">Keuze 1</div>
+      <h3 class="ch">Eerst een simpel model bouwen als meetlat</h3>
+      <p>Voordat het slimme model werd gebouwd, is er eerst een eenvoudig model gemaakt dat puur op losse woorden kijkt. Dat haalt 85.93 procent nauwkeurigheid. Pas daarna is het slimmere model getraind. Zo kun je eerlijk laten zien of de extra investering ook echt wat oplevert.</p>
+      <p>Resultaat: het slimmere model haalt 87.63 procent. Het verschil is dus aantoonbaar.</p>
+    </div>
+
+    <div class="card top-teal">
+      <div class="tag t-teal">Keuze 2</div>
+      <h3 class="ch">De test apart houden</h3>
+      <p>Van de 47.837 tickets zijn er 33.386 gebruikt om te leren, 7.176 om bij te sturen, en 7.175 puur voor de eindtest. Die testtickets heeft het model tijdens het leren nooit gezien. Zo weet je dat de score echt eerlijk is en niet omdat het model de antwoorden al kende.</p>
+      <p>Het is hetzelfde als een toets maken over lesstof die je nooit hebt geoefend. Als je die haalt, laat je zien dat je het echt begrijpt.</p>
+    </div>
+
+    <div class="card top-green">
+      <div class="tag t-green">Keuze 3: eerlijkheid</div>
+      <h3 class="ch">Zeldzame categorieen extra aandacht geven</h3>
+      <p>In de dataset komen Hardware-tickets veel vaker voor dan HR-tickets. Als je daar niets aan doet, leert het model principalmente Hardware te raden en scoort het toevallig nog redelijk. Maar voor HR-tickets klopt het dan nauwelijks.</p>
+      <p>Oplossing: zeldzame categorieen kregen een zwaarder gewicht tijdens het leren. Elke fout op een HR-ticket telde harder mee. Het model heeft geleerd om alle 8 categorieen eerlijk te behandelen.</p>
+    </div>
+
+    <h2 class="sh">Wat leveren al die keuzes op?</h2>
+    <div class="card">
+      <div class="tag t-teal">Vergelijking</div>
+      <div class="cbar" style="margin-top:12px;">
+        <div class="cbar-label">Slim model</div>
+        <div class="cbar-track"><div class="cbar-fill" style="width:87.63%;background:var(--green);"></div></div>
+        <div class="cbar-val" style="color:var(--green);">87.63%</div>
+      </div>
+      <div class="cbar">
+        <div class="cbar-label">Simpel model</div>
+        <div class="cbar-track"><div class="cbar-fill" style="width:85.93%;background:var(--amber);"></div></div>
+        <div class="cbar-val" style="color:var(--amber);">85.93%</div>
+      </div>
+      <p style="font-size:13px;margin-top:6px;">1.7 procentpunt verschil klinkt klein. Maar bij 200 tickets per dag zijn dat ruim 3 minder verkeerd gesorteerde tickets elke dag. Op jaarbasis zijn dat meer dan 750 tickets die direct bij de juiste afdeling terechtkomen.</p>
+    </div>
+    <div class="card">
+      <div class="tag t-green">Nauwkeurigheid per categorie</div>
+      <div style="margin-top:12px;">
+        <div class="f1bar"><div class="f1cat">Aankoop</div><div class="f1track"><div class="f1fill" style="width:93%;background:var(--green);"></div></div><div class="f1val" style="color:var(--green);">0.93</div></div>
+        <div class="f1bar"><div class="f1cat">Toegang</div><div class="f1track"><div class="f1fill" style="width:91%;background:var(--green);"></div></div><div class="f1val" style="color:var(--green);">0.91</div></div>
+        <div class="f1bar"><div class="f1cat">Hardware</div><div class="f1track"><div class="f1fill" style="width:90%;background:var(--green);"></div></div><div class="f1val" style="color:var(--green);">0.90</div></div>
+        <div class="f1bar"><div class="f1cat">Netwerk</div><div class="f1track"><div class="f1fill" style="width:89%;background:var(--teal);"></div></div><div class="f1val" style="color:var(--teal);">0.89</div></div>
+        <div class="f1bar"><div class="f1cat">Software</div><div class="f1track"><div class="f1fill" style="width:88%;background:var(--teal);"></div></div><div class="f1val" style="color:var(--teal);">0.88</div></div>
+        <div class="f1bar"><div class="f1cat">Beheerdersrechten</div><div class="f1track"><div class="f1fill" style="width:86%;background:#d97706;"></div></div><div class="f1val" style="color:#d97706;">0.86</div></div>
+        <div class="f1bar"><div class="f1cat">HR</div><div class="f1track"><div class="f1fill" style="width:84%;background:#d97706;"></div></div><div class="f1val" style="color:#d97706;">0.84</div></div>
+        <div class="f1bar"><div class="f1cat">Overig</div><div class="f1track"><div class="f1fill" style="width:71%;background:var(--red);"></div></div><div class="f1val" style="color:var(--red);">0.71</div></div>
+      </div>
+      <p style="font-size:12.5px;margin-top:8px;">"Overig" scoort lager omdat het een verzamelbak is voor alles wat niet in een andere categorie past. Dat is een beperking van de categorie zelf, niet van het model.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODULE 4: PROBEER HET ZELF -->
+<section class="mod" id="mod-4">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 4 van 6</div>
+        <div class="mhdr-title">Probeer het zelf</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+    </div>
+    <div class="mhdr-sub">Typ een IT-melding en zie hoe het systeem reageert.</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel heb je zelf ervaren:</strong> hoe het systeem een ticket leest, een categorie kiest en uitlegt waarom het die keuze heeft gemaakt.</div>
+  </div>
+  <div class="mbody">
+
+    <div class="story">
+      <div class="story-char">👩‍💻</div>
+      <div class="story-tag">Lena nodigt je uit</div>
+      <p>"Jij doet het nu even. Beschrijf een IT-probleem, net zoals een medewerker dat zou doen. Het systeem geeft je daarna een suggestie plus een korte uitleg waarom."</p>
+    </div>
+
+    <div class="sim-wrap">
+      <div class="sim-titlebar">
+        <div class="sim-dots">
+          <div class="sim-dot" style="background:#ef4444;"></div>
+          <div class="sim-dot" style="background:#f59e0b;"></div>
+          <div class="sim-dot" style="background:#10b981;"></div>
+        </div>
+        <span class="sim-tbname">IT-Servicedesk. Ticket classificatie</span>
+      </div>
+      <div class="sim-body">
+        <div class="sim-inlabel"><span>Beschrijf het IT-probleem</span><span style="font-size:11px;color:var(--muted);">Nederlands of Engels</span></div>
+        <textarea class="sim-ta" id="sim-input" placeholder="Bijv: Mijn laptop start niet meer op na de update van gisteren..."></textarea>
+        <div class="sim-ex">
+          <span class="sim-chip" onclick="fillEx(this)">🖥 Laptop start niet op</span>
+          <span class="sim-chip" onclick="fillEx(this)">📡 VPN valt steeds weg</span>
+          <span class="sim-chip" onclick="fillEx(this)">🔑 Kan niet inloggen</span>
+          <span class="sim-chip" onclick="fillEx(this)">💾 Outlook crasht</span>
+          <span class="sim-chip" onclick="fillEx(this)">🛒 Licentie aanvragen</span>
+          <span class="sim-chip" onclick="fillEx(this)">📋 Vakantie aanvragen HR</span>
+        </div>
+        <button class="btn-classify" id="cls-btn" onclick="runCls()">Sorteer dit ticket &#8594;</button>
+        <div class="sim-res" id="sim-res">
+          <div class="res-main" id="res-main">
+            <div class="res-icon" id="res-icon">?</div>
+            <div>
+              <div class="res-cat" id="res-cat">...</div>
+              <div class="res-conf" id="res-conf">...</div>
+            </div>
+          </div>
+          <div class="probs-title">Hoe zeker is het systeem per categorie?</div>
+          <div id="prob-bars"></div>
+          <div class="lime-wrap">
+            <div class="lime-title">Welke woorden gaven de doorslag?</div>
+            <div class="lime-txt" id="lime-txt"></div>
+            <p class="sim-note">De groene woorden zijn de woorden die het systeem het zwaarst heeft meegewogen. Dit is wat een medewerker in de praktijk ook zou zien, zodat hij kan controleren of de keuze klopt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout c-teal" style="margin-top:22px;">
+      <strong>Even eerlijk zijn:</strong> deze simulatie werkt via sleutelwoorden. Het echte model begrijpt de volledige betekenis van een zin. De simulatie laat het principe zien.
+    </div>
+
+  </div>
+</section>
+
+<!-- MODULE 5: VERTROUWEN EN ETHIEK -->
+<section class="mod" id="mod-5">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 5 van 6</div>
+        <div class="mhdr-title">Vertrouwen, ethiek en verder</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+    </div>
+    <div class="mhdr-sub">Wanneer mag je een AI vertrouwen? En hoe ver reikt dit idee eigenlijk?</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> welke ethische keuzes er zijn gemaakt, wie verantwoordelijk is voor de uitkomst, en hoe hetzelfde principe in jouw eigen sector ingezet kan worden.</div>
+  </div>
+  <div class="mbody">
+
+    <div class="story">
+      <div class="story-char">👩‍💻</div>
+      <div class="story-tag">Lena stelt de goede vragen</div>
+      <p>"Klinkt mooi, maar wat als het systeem het fout heeft? En wie is er verantwoordelijk als een ticket bij de verkeerde afdeling belandt door het AI-systeem? En wat gebeurt er met de gegevens van de medewerkers die tickets insturen?"</p>
+      <p>"Goede vragen. Hier zijn de antwoorden."</p>
+    </div>
+
+    <div class="eth-card">
+      <div class="eth-icon" style="background:var(--orange-soft);font-size:22px;">🧑‍💼</div>
+      <div class="eth-body">
+        <h4>De medewerker beslist altijd zelf</h4>
+        <p>Het systeem doet een voorstel. Lena ziet die suggestie, bekijkt de uitleg en beslist of ze het er mee eens is. Als het systeem het fout heeft, past Lena het aan. Zij is verantwoordelijk voor het ticket, niet het systeem.</p>
+      </div>
+    </div>
+
+    <div class="eth-card">
+      <div class="eth-icon" style="background:var(--teal-soft);font-size:22px;">🔍</div>
+      <div class="eth-body">
+        <h4>Het is geen zwarte doos</h4>
+        <p>Via de uitlegmethode die is ingebouwd ziet Lena precies welke woorden de doorslag gaven. "Laptop" en "scherm flikkert" wegen zwaar voor Hardware. "Toegang geweigerd" voor Toegang. Ze hoeft het systeem niet blind te vertrouwen.</p>
+      </div>
+    </div>
+
+    <div class="eth-card">
+      <div class="eth-icon" style="background:var(--amber-soft);font-size:22px;">⚖️</div>
+      <div class="eth-body">
+        <h4>Alle categorieen worden eerlijk behandeld</h4>
+        <p>In de trainingsdata komen sommige soorten tickets veel vaker voor dan andere. Zonder ingrijpen zou het systeem vaker raden op de meest voorkomende categorie en zeldzame categorieen negeren. Door zeldzame categorieen zwaarder mee te laten tellen tijdens het leren, behandelt het model iedereen eerlijk.</p>
+      </div>
+    </div>
+
+    <div class="eth-card">
+      <div class="eth-icon" style="background:var(--red-soft);font-size:22px;">🔒</div>
+      <div class="eth-body">
+        <h4>Privacy van medewerkers</h4>
+        <p>De dataset die is gebruikt voor training is openbaar en geanonimiseerd, er staan geen persoonsgegevens in. Maar als dit systeem bij een echte organisatie wordt ingezet, moeten namen, e-mailadressen en andere persoonsgegevens uit tickets worden verwijderd voordat het systeem ze verwerkt. Dat is ook verplicht onder de AVG.</p>
+      </div>
+    </div>
+
+    <div class="eth-card">
+      <div class="eth-icon" style="background:var(--bg);font-size:22px;">🧪</div>
+      <div class="eth-body">
+        <h4>Dit is een proef, geen kant-en-klaar product</h4>
+        <p>Het systeem is getraind op openbare data van een anoniem bedrijf. Elke organisatie heeft zijn eigen manier van schrijven, zijn eigen afkortingen en soms andere categorieen. Voor echte inzet bij Lena's bedrijf zou het systeem opnieuw getraind moeten worden op hun eigen tickets.</p>
+      </div>
+    </div>
+
+    <h2 class="sh">Wat betekent dit voor jouw organisatie?</h2>
+    <div class="card top-teal">
+      <h3 class="ch">Dezelfde aanpak werkt bijna overal</h3>
+      <p>Tekstuele meldingen sorteren is een probleem dat in veel sectoren voorkomt. Klantenservicemails bij een verzekeraar. Klachten bij een gemeente. Aanvragen bij een zorginstelling. Het principe is steeds hetzelfde: tekst lezen, categorie kiezen, uitleggen waarom. Alleen de dataset en de categorieen zijn anders.</p>
+      <p>Als je organisatie soortgelijke vraagstukken heeft, is de aanpak overdraagbaar.</p>
+    </div>
+
+    <h2 class="sh">Verder dan de IT-servicedesk: hoe ver reikt dit idee?</h2>
+    <div class="callout c-teal" style="margin-bottom:20px;">
+      Wat Lena elke dag doet, doen duizenden mensen in heel andere beroepen ook: tekst lezen, beoordelen en doorsturen. Hetzelfde systeem kan daarvoor worden ingezet. Hier zijn zes voorbeelden uit de echte wereld.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="card" style="margin:0;border-left:3px solid #e8621a;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">✈️</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">KLM Klantenservice</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Reizigers sturen dagelijks duizenden mailtjes. Over vertragingen, bagage, upgrades. Een AI leest elke mail en stuurt hem direct naar het juiste team. Minder wachttijd, geen handmatig doorsturen.</p>
+      </div>
+      <div class="card" style="margin:0;border-left:3px solid #0694a2;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">🏦</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">ING Klachtenbehandeling</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Klanten bellen, mailen en chatten over rekeningen, fraude en betalingen. Een model sorteert elke melding op onderwerp zodat de juiste specialist hem oppakt, zonder dat een tussenpersoon hoeft mee te kijken.</p>
+      </div>
+      <div class="card" style="margin:0;border-left:3px solid #059669;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">🏥</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">Ziekenhuistriage</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Patiënten beschrijven hun klachten online. Een AI helpt bij het indelen: is dit spoedeisend of kan het wachten? In welke afdeling thuist dit? Artsen houden altijd het laatste woord, maar het systeem spaart ze tijd.</p>
+      </div>
+      <div class="card" style="margin:0;border-left:3px solid #6d28d9;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">🏛️</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">Gemeenteloket</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Burgers melden kapotte straatverlichting, losliggende stoeptegels of geluidsoverlast. Een model leest de melding en stuurt het naar Stadsbeheer, Openbare Orde of Verkeer, zonder handmatige tussenkomst.</p>
+      </div>
+      <div class="card" style="margin:0;border-left:3px solid #9d174d;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">⚖️</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">Juridische Sector</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Advocatenkantoren ontvangen tientallen contracten, brieven en dossiers per dag. AI kan helpen bij het indelen: is dit arbeidsrecht, huurrecht of aansprakelijkheid? Zodat de juiste jurist het het snelst oppakt.</p>
+      </div>
+      <div class="card" style="margin:0;border-left:3px solid #0891b2;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:22px;">📦</span>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text);">Logistiek en Retail</div>
+        </div>
+        <p style="font-size:13px;margin:0;">Klanten mailen over retourzendingen, beschadigde producten of verkeerde leveringen. Een model leest de mail en stuurt hem direct naar Retouren, Kwaliteit of Bezorging, afhankelijk van wat er staat.</p>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#12203a,#1a3a6a);border-radius:12px;padding:24px;text-align:center;margin-top:4px;">
+      <div style="font-size:15px;font-weight:800;color:white;margin-bottom:8px;">Wat al deze gevallen gemeen hebben</div>
+      <div style="font-size:13.5px;color:rgba(255,255,255,.7);max-width:520px;margin:0 auto;">Iemand schrijft iets in gewone taal. Een mens of machine leest het en beslist waar het naartoe moet. In al die gevallen kan hetzelfde principe worden toegepast: tekst begrijpen, categorie bepalen, uitleggen waarom. Het enige dat verandert is de dataset.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODULE 6: KENNISCHECK -->
+<section class="mod" id="mod-6">
+  <div class="mhdr">
+    <div class="mhdr-top">
+      <div>
+        <div class="mhdr-eyebrow">Onderdeel 6 van 6</div>
+        <div class="mhdr-title">Kennischeck</div>
+      </div>
+      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+    </div>
+    <div class="mhdr-sub">Test wat je hebt onthouden in 5 vragen.</div>
+    <div class="mhdr-goal"><strong>Na dit onderdeel heb je gecontroleerd</strong> of je de kernprincipes van het systeem kunt benoemen en toepassen.</div>
+  </div>
+  <div class="mbody">
+
+    <div class="quiz-outer" id="quiz-outer">
+      <div class="qprog"><div class="qprog-fill" id="qpfill"></div></div>
+
+      <div class="qq active" id="qq1">
+        <div class="qnum">Vraag 1 van 5</div>
+        <div class="qtxt">Er komt een IT-ticket binnen. Wat doet het systeem vervolgens?</div>
+        <div class="qopts">
+          <div class="qopt" onclick="ans(this,false,1)"><div class="qletter">A</div><div class="qopttext">Het beantwoordt het ticket meteen en stuurt een oplossing terug.</div></div>
+          <div class="qopt" onclick="ans(this,true,1)"><div class="qletter">B</div><div class="qopttext">Het leest de tekst en stelt een categorie voor. De medewerker beslist daarna zelf.</div></div>
+          <div class="qopt" onclick="ans(this,false,1)"><div class="qletter">C</div><div class="qopttext">Het stuurt het ticket zonder menselijke tussenkomst door naar de juiste afdeling.</div></div>
+        </div>
+        <div class="qfb fbok" id="fbok1">Goed! Het systeem stelt een categorie voor. De medewerker bevestigt of past aan. Het systeem beslist nooit zelfstandig.</div>
+        <div class="qfb fbwrong" id="fbw1">Niet helemaal. Het systeem doet een voorstel voor een categorie. Maar de medewerker heeft altijd het laatste woord.</div>
+        <button class="btn-nxtq" id="nq1" onclick="nxtQ(2)">Volgende vraag &#8594;</button>
+      </div>
+
+      <div class="qq" id="qq2">
+        <div class="qnum">Vraag 2 van 5</div>
+        <div class="qtxt">Waarom werkt dit systeem beter dan een systeem dat puur op losse woorden zoekt?</div>
+        <div class="qopts">
+          <div class="qopt" onclick="ans(this,false,2)"><div class="qletter">A</div><div class="qopttext">Omdat het systeem sneller is en meer tickets per seconde aankan.</div></div>
+          <div class="qopt" onclick="ans(this,false,2)"><div class="qletter">B</div><div class="qopttext">Omdat het meer categorieen kent dan een zoeksysteem.</div></div>
+          <div class="qopt" onclick="ans(this,true,2)"><div class="qletter">C</div><div class="qopttext">Omdat het de betekenis van een hele zin begrijpt, niet alleen losse woorden.</div></div>
+        </div>
+        <div class="qfb fbok" id="fbok2">Precies. Het systeem begrijpt dat "Outlook crasht" anders is dan "Outlook: toegang geweigerd", ook al staat het woord "Outlook" in beide tickets.</div>
+        <div class="qfb fbwrong" id="fbw2">Niet correct. Het grote voordeel is dat het systeem de betekenis van een zin begrijpt. Hetzelfde woord kan in twee tickets iets heel anders betekenen. Dat snapt dit systeem wel.</div>
+        <button class="btn-nxtq" id="nq2" onclick="nxtQ(3)">Volgende vraag &#8594;</button>
+      </div>
+
+      <div class="qq" id="qq3">
+        <div class="qnum">Vraag 3 van 5</div>
+        <div class="qtxt">Waarom zijn zeldzame categorieen zoals HR extra aandacht gegeven tijdens het trainen?</div>
+        <div class="qopts">
+          <div class="qopt" onclick="ans(this,false,3)"><div class="qletter">A</div><div class="qopttext">Om het systeem sneller te maken voor die specifieke tickets.</div></div>
+          <div class="qopt" onclick="ans(this,true,3)"><div class="qletter">B</div><div class="qopttext">Zodat het systeem ook die categorieen goed leert herkennen, zelfs als ze minder vaak voorkomen in de trainingsdata.</div></div>
+          <div class="qopt" onclick="ans(this,false,3)"><div class="qletter">C</div><div class="qopttext">Omdat HR-tickets altijd urgenter zijn dan andere tickets.</div></div>
+        </div>
+        <div class="qfb fbok" id="fbok3">Goed. Zonder extra aandacht zou het systeem zeldzame categorieen slecht leren kennen, simpelweg omdat het er te weinig van heeft gezien. Door ze zwaarder mee te laten tellen, wordt het eerlijker.</div>
+        <div class="qfb fbwrong" id="fbw3">Niet correct. Het gaat om eerlijkheid. Zeldzame categorieen komen minder voor in de data, waardoor het systeem ze anders zou negeren. Door ze zwaarder mee te tellen leer je het systeem alle categorieen goed te herkennen.</div>
+        <button class="btn-nxtq" id="nq3" onclick="nxtQ(4)">Volgende vraag &#8594;</button>
+      </div>
+
+      <div class="qq" id="qq4">
+        <div class="qnum">Vraag 4 van 5</div>
+        <div class="qtxt">Stel: jouw organisatie wil dit systeem gaan gebruiken. Wat moet er dan eerst nog gebeuren?</div>
+        <div class="qopts">
+          <div class="qopt" onclick="ans(this,false,4)"><div class="qletter">A</div><div class="qopttext">Niets. Het systeem werkt direct en is klaar voor gebruik.</div></div>
+          <div class="qopt" onclick="ans(this,true,4)"><div class="qletter">B</div><div class="qopttext">Het systeem opnieuw trainen op de eigen tickets van jouw organisatie, met de eigen categorieen en taal.</div></div>
+          <div class="qopt" onclick="ans(this,false,4)"><div class="qletter">C</div><div class="qopttext">De uitlegfunctie uitschakelen zodat het systeem sneller wordt.</div></div>
+        </div>
+        <div class="qfb fbok" id="fbok4">Correct. Dit is een proef op openbare data. Jouw organisatie heeft zijn eigen taalgebruik en categorieen. Hertraining op echte tickets van die organisatie is nodig voor betrouwbare inzet.</div>
+        <div class="qfb fbwrong" id="fbw4">Niet correct. Dit systeem is getraind op openbare data van een ander bedrijf. Voor gebruik bij jouw organisatie moet het opnieuw leren op jullie eigen tickets.</div>
+        <button class="btn-nxtq" id="nq4" onclick="nxtQ(5)">Volgende vraag &#8594;</button>
+      </div>
+
+      <div class="qq" id="qq5">
+        <div class="qnum">Vraag 5 van 5</div>
+        <div class="qtxt">Het systeem stelt "Hardware" voor bij een ticket. De medewerker denkt dat het eigenlijk "Software" is. Wat gebeurt er?</div>
+        <div class="qopts">
+          <div class="qopt" onclick="ans(this,false,5)"><div class="qletter">A</div><div class="qopttext">Dat kan niet. Het systeem is te zeker van zijn keuze om overschreven te worden.</div></div>
+          <div class="qopt" onclick="ans(this,false,5)"><div class="qletter">B</div><div class="qopttext">De manager moet instemmen voordat de correctie wordt doorgevoerd.</div></div>
+          <div class="qopt" onclick="ans(this,true,5)"><div class="qletter">C</div><div class="qopttext">De medewerker past de categorie aan. Dat kan altijd en is precies hoe het systeem bedoeld is.</div></div>
+        </div>
+        <div class="qfb fbok" id="fbok5">Precies goed. Corrigeren kan altijd en is de bedoeling. De medewerker heeft de eindverantwoordelijkheid. Dat is een bewuste keuze in hoe het systeem is gebouwd.</div>
+        <div class="qfb fbwrong" id="fbw5">Niet correct. Corrigeren kan altijd. Het systeem doet een voorstel. De medewerker heeft altijd het laatste woord. Dat is een kernprincipe.</div>
+        <button class="btn-nxtq" id="nq5" onclick="showRes()">Bekijk mijn resultaat &#8594;</button>
+      </div>
+
+      <div class="qresult" id="qresult">
+        <div class="qscore-circle" id="qscircle">
+          <div class="qsnum" id="qsnum">5</div>
+          <div class="qsdenom">van 5</div>
+        </div>
+        <div class="qrtitle" id="qrtitle">Uitstekend!</div>
+        <div class="qrsub" id="qrsub">Je begrijpt hoe dit systeem werkt, wat de keuzes erachter zijn en hoe het verantwoord ingezet kan worden.</div>
+        <button class="btn-retry" onclick="retryQ()">Opnieuw proberen</button>
+        <div class="review-wrap">
+          <div class="review-title">Terugblik op je antwoorden</div>
+          <div id="review-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="val-block" id="val-block">
+      <div class="val-hdr"><span style="font-size:20px;">&#128203;</span><div class="val-title">Over deze e-learning</div></div>
+      <div class="val-row"><div class="val-key">Auteur</div><div class="val-val">Ertugrul Demirci, BIM Groep 10, Avans Hogeschool</div></div>
+      <div class="val-row"><div class="val-key">AI-model</div><div class="val-val">DistilBERT (fijngestemd), 87.63% nauwkeurigheid op 47.837 IT-tickets</div></div>
+      <div class="val-row"><div class="val-key">Uitlegbaarheid</div><div class="val-val">LIME, per voorspelling</div></div>
+      <div class="val-row"><div class="val-key">Gevalideerd door</div><div class="val-val">[Naam en functie van de persoon die feedback heeft gegeven]</div></div>
+      <div class="val-row"><div class="val-key">Feedback ontvangen</div><div class="val-val">[Vul in na het validatiegesprek]</div></div>
+      <div class="val-row"><div class="val-key">Aangepast op basis van feedback</div><div class="val-val">[Wat is verbeterd]</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="mfooter">
+  <button class="btn-p" id="btnp" onclick="prev()" disabled>&#8592; Vorige</button>
+  <span class="footer-mid" id="ftxt">Welkom</span>
+  <button class="btn-n" id="btnn" onclick="nxt()">Volgende onderdeel &#8594;</button>
+</div>
+</main>
+
+<script>
+var cur=0,TOTAL=6,done=new Set();
+function goTo(n){
+  document.getElementById('mod-'+cur).classList.remove('active');
+  document.querySelectorAll('.nb').forEach(function(el){el.classList.remove('active');});
+  cur=n;
+  document.getElementById('mod-'+cur).classList.add('active');
+  document.querySelector('[data-m="'+cur+'"]').classList.add('active');
+  document.getElementById('btnp').disabled=cur===0;
+  document.getElementById('btnn').disabled=cur===TOTAL;
+  document.getElementById('btnn').style.display=cur===0?'none':'';
+  document.getElementById('ftxt').textContent=cur===0?'Welkom':'Onderdeel '+cur+' van '+TOTAL;
+  window.scrollTo(0,0);
+  if(cur===1)animTickets();
+}
+function nxt(){markDone(cur);if(cur<TOTAL)goTo(cur+1);}
+function prev(){if(cur>0)goTo(cur-1);}
+function markDone(n){
+  if(n<1)return;done.add(n);
+  var nn=document.getElementById('nn-'+n);
+  if(nn)nn.textContent='✓';
+  var nb=document.querySelector('[data-m="'+n+'"]');
+  if(nb)nb.classList.add('done');
+  var pct=(done.size/TOTAL)*100;
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('ptxt').textContent=done.size+' / '+TOTAL;
+  if(done.size===TOTAL)document.getElementById('val-block').style.display='block';
+}
+document.getElementById('btnn').style.display='none';
+
+function animTickets(){
+  var c=0,el=document.getElementById('tc-count');
+  if(!el)return;
+  var t=setInterval(function(){
+    c+=Math.floor(Math.random()*8)+3;
+    if(c>=147){c=147;clearInterval(t);}
+    el.textContent=c+' tickets';
+  },60);
+}
+
+var EXMAP={
+  'Laptop start niet op':'Mijn laptop wil niet meer opstarten. Hij gaat aan maar blijft op een zwart scherm hangen.',
+  'VPN valt steeds weg':'De VPN verbinding valt elke 10 minuten weg als ik thuiswerk. Ik kan dan geen bestanden openen.',
+  'Kan niet inloggen':'Mijn wachtwoord is verlopen en ik kan niet meer inloggen op mijn account. Ik word steeds geblokkeerd.',
+  'Outlook crasht':'Outlook crasht elke keer als ik een bijlage open die groter is dan 5 MB.',
+  'Licentie aanvragen':'Ik wil graag een licentie aanvragen voor Adobe Acrobat Pro. We hebben er 3 nodig. Budget is goedgekeurd.',
+  'Vakantie aanvragen HR':'Ik wil twee weken vakantie opnemen in augustus. Hoe regel ik dit via HR?'
+};
+function fillEx(el){
+  var txt=el.textContent.trim();
+  var found=null;
+  Object.entries(EXMAP).forEach(function(e){if(txt.indexOf(e[0].split(' ')[0])>=0)found=e[1];});
+  document.getElementById('sim-input').value=found||txt;
+}
+
+var KEYS={
+  'Hardware':['laptop','scherm','printer','monitor','keyboard','toetsenbord','muis','mouse','battery','batterij','charger','oplader','docking','cable','kabel','computer','pc','display','defect','kapot','flickering','flikkert','hdmi','usb','projector','beeldscherm','fan','screen','broken','device'],
+  'Software':['crash','crasht','install','installeert','update','updaten','error','fout','foutmelding','bug','outlook','excel','word','teams','freeze','bevriest','traag','slow','application','applicatie','app','programma','software','office','microsoft','versie','version','corrupt'],
+  'Access':['access','toegang','permission','toestemming','geblokkeerd','blocked','denied','geweigerd','folder','map','share','gedeelde','shared','portal','read','write','bestand','file','drive','openen'],
+  'Network':['network','netwerk','internet','vpn','wifi','wi-fi','connection','verbinding','disconnect','verbroken','bandwidth','ping','router','ethernet','dns','firewall','intranet'],
+  'Administrative Rights':['admin','administrator','password','wachtwoord','reset','resetten','account','expired','verlopen','domain','domein','credentials','login','inloggen','aanmelden','privilege','rechten','2fa','mfa'],
+  'Purchase':['purchase','bestellen','kopen','aanschaffen','order','license','licentie','subscription','abonnement','budget','invoice','factuur','approval','goedkeuring','aanvragen','procurement'],
+  'HR':['hr','human resources','personeelszaken','verlof','vakantie','ziek','salaris','payroll','contract','onboarding','afwezig','holiday','vrije','ziekteverlof']
+};
+var ICONS={'Hardware':'&#128421;','Software':'&#128190;','Access':'&#128273;','Administrative Rights':'&#128100;','Network':'&#127760;','Purchase':'&#128717;','HR':'&#128203;','Miscellaneous':'&#128193;'};
+var COLORS={'Hardware':'#1e40af','Software':'#166534','Access':'#854d0e','Administrative Rights':'#6d28d9','Network':'#0f766e','Purchase':'#9d174d','HR':'#991b1b','Miscellaneous':'#475569'};
+
+function classify(txt){
+  var lo=txt.toLowerCase(),sc={},mt={};
+  Object.entries(KEYS).forEach(function(e){
+    var c=e[0],ks=e[1],s=0,m=[];
+    ks.forEach(function(k){if(lo.indexOf(k)>=0){s++;if(m.indexOf(k)<0)m.push(k);}});
+    sc[c]=s;mt[c]=m;
+  });
+  var mx=Math.max.apply(null,Object.values(sc));
+  if(mx===0)return{pred:'Miscellaneous',probs:{'Miscellaneous':100},mt:{}};
+  var ex={},sum=0;
+  Object.entries(sc).forEach(function(e){var v=Math.exp(e[1]*2.4);ex[e[0]]=v;sum+=v;});
+  var pr={};
+  Object.entries(ex).forEach(function(e){pr[e[0]]=Math.round(e[1]/sum*100);});
+  var pred=Object.entries(sc).sort(function(a,b){return b[1]-a[1];})[0][0];
+  return{pred:pred,probs:pr,mt:mt};
+}
+function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escR(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hlW(txt,cat,mt){
+  if(!mt[cat]||!mt[cat].length)return escH(txt);
+  var r=escH(txt);
+  mt[cat].slice().sort(function(a,b){return b.length-a.length;}).forEach(function(k){
+    r=r.replace(new RegExp('('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>');
+  });
+  return r;
+}
+function runCls(){
+  var txt=document.getElementById('sim-input').value.trim();
+  if(!txt){document.getElementById('sim-input').focus();return;}
+  var btn=document.getElementById('cls-btn');
+  btn.disabled=true;btn.textContent='Analyseren...';
+  setTimeout(function(){
+    var res=classify(txt),pred=res.pred,probs=res.probs,mt=res.mt;
+    var col=COLORS[pred]||'#475569',icon=ICONS[pred]||'&#128193;';
+    var rm=document.getElementById('res-main');
+    rm.style.background=col+'15';rm.style.borderColor=col+'55';
+    document.getElementById('res-icon').innerHTML=icon;
+    document.getElementById('res-cat').textContent=pred;document.getElementById('res-cat').style.color=col;
+    document.getElementById('res-conf').textContent='Het systeem is '+probs[pred]+'% zeker van deze keuze.';
+    var sorted=Object.entries(probs).sort(function(a,b){return b[1]-a[1];});
+    document.getElementById('prob-bars').innerHTML=sorted.map(function(e){
+      var c=e[0],p=e[1],w=c===pred;
+      return '<div class="prob-row"><div class="prob-cat">'+c+'</div><div class="prob-track"><div class="prob-bar'+(w?' win':'')+'" style="width:0%;'+(w?'':'background:#cbd5e1;')+'" data-w="'+p+'"></div></div><div class="prob-val'+(w?' win':'')+'">'+p+'%</div></div>';
+    }).join('');
+    setTimeout(function(){document.querySelectorAll('.prob-bar[data-w]').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%';});},50);
+    document.getElementById('lime-txt').innerHTML=hlW(txt,pred,mt);
+    document.getElementById('sim-res').style.display='block';
+    btn.disabled=false;btn.textContent='Opnieuw sorteren →';
+    document.getElementById('sim-res').scrollIntoView({behavior:'smooth',block:'nearest'});
+  },700);
+}
+
+var qScore=0,qAns=[null,null,null,null,null];
+var QDATA=[
+  {opts:['Het beantwoordt het ticket meteen en stuurt een oplossing terug.','Het leest de tekst en stelt een categorie voor. De medewerker beslist daarna zelf.','Het stuurt het ticket zonder menselijke tussenkomst door naar de juiste afdeling.'],correct:1,exp:'Het systeem stelt een categorie voor. De medewerker heeft altijd het laatste woord.'},
+  {opts:['Omdat het systeem sneller is en meer tickets per seconde aankan.','Omdat het meer categorieen kent dan een zoeksysteem.','Omdat het de betekenis van een hele zin begrijpt, niet alleen losse woorden.'],correct:2,exp:'Het systeem begrijpt context. Hetzelfde woord kan in twee tickets iets anders betekenen en het systeem ziet dat verschil.'},
+  {opts:['Om het systeem sneller te maken voor die specifieke tickets.','Zodat het systeem ook die categorieen goed leert herkennen, zelfs als ze minder vaak voorkomen.','Omdat HR-tickets altijd urgenter zijn dan andere tickets.'],correct:1,exp:'Zonder extra aandacht zou het systeem zeldzame categorieen negeren. Door ze zwaarder mee te tellen worden alle categorieen eerlijk behandeld.'},
+  {opts:['Niets. Het systeem werkt direct en is klaar voor gebruik.','Het systeem opnieuw trainen op de eigen tickets van jouw organisatie, met de eigen categorieen en taal.','De uitlegfunctie uitschakelen zodat het systeem sneller wordt.'],correct:1,exp:'Dit is een proef op openbare data. Elke organisatie heeft zijn eigen taal en categorieen. Hertraining is nodig.'},
+  {opts:['Dat kan niet. Het systeem is te zeker van zijn keuze.','De manager moet instemmen voordat de correctie wordt doorgevoerd.','De medewerker past de categorie aan. Dat kan altijd en is precies hoe het systeem bedoeld is.'],correct:2,exp:'Corrigeren kan altijd. De medewerker heeft de eindverantwoordelijkheid. Dat is een kernprincipe van het systeem.'}
+];
+
+function ans(el,correct,qn){
+  var idx=qn-1;
+  if(qAns[idx]!==null)return;
+  var opts=el.parentElement.querySelectorAll('.qopt');
+  opts.forEach(function(o){o.classList.add('qdisabled');o.onclick=null;});
+  if(correct){el.classList.add('qcorrect');qScore++;document.getElementById('fbok'+qn).style.display='block';qAns[idx]=QDATA[idx].correct;}
+  else{el.classList.add('qwrong');document.getElementById('fbw'+qn).style.display='block';qAns[idx]=Array.from(opts).indexOf(el);}
+  document.getElementById('nq'+qn).style.display='inline-block';
+  document.getElementById('qpfill').style.width=(qn/5*100)+'%';
+}
+function nxtQ(n){document.getElementById('qq'+(n-1)).classList.remove('active');document.getElementById('qq'+n).classList.add('active');}
+function showRes(){
+  document.getElementById('qq5').classList.remove('active');
+  document.getElementById('qpfill').style.width='100%';
+  var res=document.getElementById('qresult');res.style.display='block';
+  document.getElementById('qsnum').textContent=qScore;
+  var circ=document.getElementById('qscircle');
+  if(qScore===5){document.getElementById('qrtitle').textContent='Alles goed. Uitstekend!';document.getElementById('qrsub').textContent='Je begrijpt hoe dit systeem werkt, welke keuzes erin zitten en hoe het verantwoord ingezet kan worden.';circ.style.background='var(--green-soft)';circ.style.borderColor='var(--green)';document.getElementById('qsnum').style.color='var(--green)';}
+  else if(qScore>=3){document.getElementById('qrtitle').textContent=qScore+' van de 5 goed.';document.getElementById('qrsub').textContent='Je hebt de meeste onderdelen goed begrepen. Bekijk hieronder waar je een fout hebt gemaakt.';circ.style.background='var(--amber-soft)';circ.style.borderColor='#d97706';document.getElementById('qsnum').style.color='#d97706';}
+  else{document.getElementById('qrtitle').textContent=qScore+' van de 5 goed.';document.getElementById('qrsub').textContent='Geen probleem. Hieronder zie je precies waar het misging en wat het goede antwoord was.';circ.style.background='var(--red-soft)';circ.style.borderColor='var(--red)';document.getElementById('qsnum').style.color='var(--red)';}
+  renderReview();markDone(6);
+}
+function renderReview(){
+  var qtexts=['Er komt een IT-ticket binnen. Wat doet het systeem vervolgens?','Waarom werkt dit systeem beter dan een systeem dat puur op losse woorden zoekt?','Waarom zijn zeldzame categorieen extra aandacht gegeven tijdens het trainen?','Stel: jouw organisatie wil dit systeem gaan gebruiken. Wat moet er dan eerst nog?','Het systeem stelt Hardware voor. De medewerker denkt: Software. Wat gebeurt er?'];
+  var html='';
+  QDATA.forEach(function(q,i){
+    var ua=qAns[i],ok=ua===q.correct;
+    html+='<div class="rev-item"><div class="rev-icon">'+(ok?'<span style="color:var(--green)">&#10003;</span>':'<span style="color:var(--red)">&#10007;</span>')+'</div><div><div class="rev-q">Vraag '+(i+1)+': '+qtexts[i]+'</div>'+(ok?'':'<div class="rev-correct-ans">Het goede antwoord: '+q.opts[q.correct]+'</div>')+'<div class="rev-exp">'+q.exp+'</div></div></div>';
+  });
+  document.getElementById('review-list').innerHTML=html;
+}
+function retryQ(){
+  qScore=0;qAns=[null,null,null,null,null];
+  document.getElementById('qresult').style.display='none';
+  document.getElementById('qpfill').style.width='0%';
+  document.getElementById('review-list').innerHTML='';
+  for(var n=1;n<=5;n++){
+    var q=document.getElementById('qq'+n);
+    q.classList.remove('active');
+    q.querySelectorAll('.qopt').forEach(function(o){o.classList.remove('qcorrect','qwrong','qdisabled');});
+    var fbok=document.getElementById('fbok'+n);var fbw=document.getElementById('fbw'+n);
+    if(fbok)fbok.style.display='none';if(fbw)fbw.style.display='none';
+    document.getElementById('nq'+n).style.display='none';
+  }
+  reattach();document.getElementById('qq1').classList.add('active');
+}
+function reattach(){
+  var cm=[[false,true,false],[false,false,true],[false,true,false],[false,true,false],[false,false,true]];
+  for(var n=1;n<=5;n++){
+    (function(nn){
+      document.querySelectorAll('#qq'+nn+' .qopt').forEach(function(o,i){
+        o.onclick=(function(c){return function(){ans(this,c,nn);};})(cm[nn-1][i]);
+      });
+    })(n);
+  }
+}
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'&&cur<TOTAL)nxt();if(e.key==='ArrowLeft'&&cur>0)prev();});
+</script>
+</body>
+</html>
