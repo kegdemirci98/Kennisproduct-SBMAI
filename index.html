@@ -90,16 +90,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .story-char{position:absolute;top:-14px;left:18px;background:white;padding:0 6px;font-size:20px;border-radius:50%;}
 
 /* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 26px;margin-bottom:20px;box-shadow:var(--shadow);}
 .card.top-orange{border-top:3px solid var(--orange);}
 .card.top-teal{border-top:3px solid var(--teal);}
 .card.top-green{border-top:3px solid var(--green);}
 .card.top-red{border-top:3px solid var(--red);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:22px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px;}
 
 /* TYPOGRAPHY */
-h2.sh{font-size:20px;font-weight:800;color:var(--text);margin:32px 0 14px;}
+h2.sh{font-size:20px;font-weight:800;color:var(--text);margin:40px 0 16px;}
 h2.sh:first-child{margin-top:0;}
 h3.ch{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
 p{font-size:14.5px;color:var(--muted);margin-bottom:12px;}
@@ -349,7 +349,7 @@ p strong{color:var(--text);}
     <div class="sb-prog-label"><span>Voortgang</span><span id="ptxt">0 / 6</span></div>
     <div class="sb-prog-track"><div class="sb-prog-fill" id="pfill"></div></div>
   </div>
-  <div class="sb-total-time">Totale tijd: circa 30 minuten</div>
+  <div class="sb-total-time">Totale tijd: circa 15 minuten</div>
   <nav class="sb-nav">
     <div class="nb active" data-m="0" onclick="goTo(0)">
       <div class="nb-num" id="nn-0">&#9654;</div>
@@ -359,32 +359,32 @@ p strong{color:var(--text);}
     <div class="nb" data-m="1" onclick="goTo(1)">
       <div class="nb-num" id="nn-1">1</div>
       <div class="nb-info"><span class="nb-eyebrow">Startpunt</span><span class="nb-label">Dag op de servicedesk</span></div>
-      <span class="nb-time">4 min</span>
+      <span class="nb-time">2 min</span>
     </div>
     <div class="nb" data-m="2" onclick="goTo(2)">
       <div class="nb-num" id="nn-2">2</div>
       <div class="nb-info"><span class="nb-eyebrow">De oplossing</span><span class="nb-label">Hoe helpt de AI?</span></div>
-      <span class="nb-time">5 min</span>
+      <span class="nb-time">3 min</span>
     </div>
     <div class="nb" data-m="3" onclick="goTo(3)">
       <div class="nb-num" id="nn-3">3</div>
       <div class="nb-info"><span class="nb-eyebrow">Achter de schermen</span><span class="nb-label">Hoe is het gebouwd?</span></div>
-      <span class="nb-time">5 min</span>
+      <span class="nb-time">3 min</span>
     </div>
     <div class="nb" data-m="4" onclick="goTo(4)">
       <div class="nb-num" id="nn-4">4</div>
       <div class="nb-info"><span class="nb-eyebrow">Doe het zelf</span><span class="nb-label">Probeer het zelf</span></div>
-      <span class="nb-time">5 min</span>
+      <span class="nb-time">2 min</span>
     </div>
     <div class="nb" data-m="5" onclick="goTo(5)">
       <div class="nb-num" id="nn-5">5</div>
       <div class="nb-info"><span class="nb-eyebrow">Verantwoord gebruik</span><span class="nb-label">Ethiek en hoe ver dit reikt</span></div>
-      <span class="nb-time">5 min</span>
+      <span class="nb-time">3 min</span>
     </div>
     <div class="nb" data-m="6" onclick="goTo(6)">
       <div class="nb-num" id="nn-6">6</div>
       <div class="nb-info"><span class="nb-eyebrow">Afsluiting</span><span class="nb-label">Kennischeck</span></div>
-      <span class="nb-time">5 min</span>
+      <span class="nb-time">2 min</span>
     </div>
   </nav>
   <div class="sb-foot">Ertugrul Demirci · DistilBERT + LIME</div>
@@ -412,18 +412,18 @@ p strong{color:var(--text);}
     <div class="total-time">
       <div class="tt-icon">⏱</div>
       <div>
-        <div class="tt-text">Totale tijd: ongeveer 30 minuten</div>
+        <div class="tt-text">Totale tijd: ongeveer 15 minuten</div>
         <div class="tt-sub">Je kunt stoppen en later verdergaan. Je voortgang wordt in de zijbalk bijgehouden.</div>
       </div>
     </div>
 
     <div class="wmod-grid">
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 1</div><div class="wmod-name">Dag op de servicedesk</div><div class="wmod-time">⏱ 4 minuten</div></div>
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 2</div><div class="wmod-name">Hoe helpt de AI? + DistilBERT</div><div class="wmod-time">⏱ 5 minuten</div></div>
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 3</div><div class="wmod-name">Hoe is het gebouwd?</div><div class="wmod-time">⏱ 5 minuten</div></div>
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 4</div><div class="wmod-name">Probeer het zelf</div><div class="wmod-time">⏱ 5 minuten</div></div>
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 5</div><div class="wmod-name">Vertrouwen, ethiek en toekomst</div><div class="wmod-time">⏱ 5 minuten</div></div>
-      <div class="wmod-card"><div class="wmod-n">Onderdeel 6</div><div class="wmod-name">Kennischeck</div><div class="wmod-time">⏱ 5 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 1</div><div class="wmod-name">Dag op de servicedesk</div><div class="wmod-time">⏱ 2 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 2</div><div class="wmod-name">Hoe helpt de AI?</div><div class="wmod-time">⏱ 3 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 3</div><div class="wmod-name">Hoe is het gebouwd?</div><div class="wmod-time">⏱ 3 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 4</div><div class="wmod-name">Probeer het zelf</div><div class="wmod-time">⏱ 2 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 5</div><div class="wmod-name">Ethiek en hoe ver dit reikt</div><div class="wmod-time">⏱ 3 minuten</div></div>
+      <div class="wmod-card"><div class="wmod-n">Onderdeel 6</div><div class="wmod-name">Kennischeck</div><div class="wmod-time">⏱ 2 minuten</div></div>
     </div>
 
     <button class="btn-start" onclick="goTo(1)">Begin de e-learning <span>&#8594;</span></button>
@@ -438,9 +438,9 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 1 van 6</div>
         <div class="mhdr-title">Dag op de servicedesk</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 4 minuten</div>
+      <div class="mhdr-time-badge">⏱ 2 minuten</div>
     </div>
-    <div class="mhdr-sub">Het probleem dat we gaan oplossen.</div>
+    <div class="mhdr-sub">Het probleem dat centraal staat.</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> waarom IT-servicedesks vastlopen bij het verwerken van tickets, en hoe veel tijd dat eigenlijk kost.</div>
   </div>
   <div class="mbody">
@@ -551,7 +551,7 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 2 van 6</div>
         <div class="mhdr-title">Hoe helpt de AI?</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+      <div class="mhdr-time-badge">⏱ 3 minuten</div>
     </div>
     <div class="mhdr-sub">Van handmatig sorteren naar automatische suggesties. Plus: wat is DistilBERT eigenlijk?</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> wat het AI-systeem precies doet, waarom het beter werkt dan zoeken op losse woorden, wat DistilBERT is, en welke 8 soorten tickets het herkent.</div>
@@ -664,7 +664,7 @@ p strong{color:var(--text);}
       <h3 class="ch">Denk aan een heel belezen collega</h3>
       <p>Stel je een nieuwe collega voor. Voordat hij bij LogiPro begon, heeft hij drie jaar lang niets anders gedaan dan lezen. Niet alleen een paar boeken, maar miljarden zinnen. Nieuwsartikelen, handleidingen, websites, chats. Zijn taalgevoel is daardoor uitstekend geworden.</p>
       <p>Hij begrijpt nuance. Hij weet dat "Outlook crasht" iets anders betekent dan "Outlook: toegang geweigerd", ook al staat het woord "Outlook" in beide zinnen. Hij snapt context.</p>
-      <p>Daarna stuurt je hem naar een cursus van drie weken met 47.837 ingevulde IT-tickets, elk met het juiste antwoord erbij. Na die cursus is hij heel goed in IT-tickets sorteren.</p>
+      <p>Daarna stuur je hem naar een cursus van drie weken met 47.837 ingevulde IT-tickets, elk met het juiste antwoord erbij. Na die cursus is hij heel goed in IT-tickets sorteren.</p>
       <p><strong>Dat is DistilBERT.</strong> Een taalmodel dat eerst heel veel taal heeft verwerkt, en daarna specifiek is bijgeleerd op IT-tickets.</p>
     </div>
 
@@ -715,7 +715,7 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 3 van 6</div>
         <div class="mhdr-title">Hoe is het gebouwd?</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+      <div class="mhdr-time-badge">⏱ 3 minuten</div>
     </div>
     <div class="mhdr-sub">Trainen, keuzes maken en resultaten eerlijk beoordelen.</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> hoe het model heeft leren sorteren, welke bewuste keuzes er zijn gemaakt en wat de resultaten precies betekenen.</div>
@@ -783,14 +783,14 @@ p strong{color:var(--text);}
     <div class="card top-teal">
       <div class="tag t-teal">Keuze 2</div>
       <h3 class="ch">De test apart houden</h3>
-      <p>Van de 47.837 tickets zijn er 33.386 gebruikt om te leren, 7.176 om bij te sturen, en 7.175 puur voor de eindtest. Die testtickets heeft het model tijdens het leren nooit gezien. Zo weet je dat de score echt eerlijk is en niet omdat het model de antwoorden al kende.</p>
+      <p>Van de 47.837 tickets zijn er 33.486 gebruikt om te leren, 7.176 om bij te sturen, en 7.175 puur voor de eindtest. Die testtickets heeft het model tijdens het leren nooit gezien. Zo weet je dat de score echt eerlijk is en niet omdat het model de antwoorden al kende.</p>
       <p>Het is hetzelfde als een toets maken over lesstof die je nooit hebt geoefend. Als je die haalt, laat je zien dat je het echt begrijpt.</p>
     </div>
 
     <div class="card top-green">
       <div class="tag t-green">Keuze 3: eerlijkheid</div>
       <h3 class="ch">Zeldzame categorieen extra aandacht geven</h3>
-      <p>In de dataset komen Hardware-tickets veel vaker voor dan HR-tickets. Als je daar niets aan doet, leert het model principalmente Hardware te raden en scoort het toevallig nog redelijk. Maar voor HR-tickets klopt het dan nauwelijks.</p>
+      <p>In de dataset komen Hardware-tickets veel vaker voor dan HR-tickets. Als je daar niets aan doet, leert het model voornamelijk Hardware te raden en scoort het toevallig nog redelijk. Maar voor HR-tickets klopt het dan nauwelijks.</p>
       <p>Oplossing: zeldzame categorieen kregen een zwaarder gewicht tijdens het leren. Elke fout op een HR-ticket telde harder mee. Het model heeft geleerd om alle 8 categorieen eerlijk te behandelen.</p>
     </div>
 
@@ -835,7 +835,7 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 4 van 6</div>
         <div class="mhdr-title">Probeer het zelf</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+      <div class="mhdr-time-badge">⏱ 2 minuten</div>
     </div>
     <div class="mhdr-sub">Typ een IT-melding en zie hoe het systeem reageert.</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel heb je zelf ervaren:</strong> hoe het systeem een ticket leest, een categorie kiest en uitlegt waarom het die keuze heeft gemaakt.</div>
@@ -882,7 +882,7 @@ p strong{color:var(--text);}
           <div class="lime-wrap">
             <div class="lime-title">Welke woorden gaven de doorslag?</div>
             <div class="lime-txt" id="lime-txt"></div>
-            <p class="sim-note">De groene woorden zijn de woorden die het systeem het zwaarst heeft meegewogen. Dit is wat een medewerker in de praktijk ook zou zien, zodat hij kan controleren of de keuze klopt.</p>
+            <p class="sim-note">De groene woorden zijn de woorden die het systeem het zwaarst heeft meegewogen. Dit is wat een medewerker in de praktijk ook zou zien, zodat hij kan controleren of de keuze klopt. Het echte DistilBERT-model draait lokaal op een computer en kan niet rechtstreeks in een browser worden ingebouwd. Wat je hier ziet is een vereenvoudigde versie die het principe demonstreert.</p>
           </div>
         </div>
       </div>
@@ -903,7 +903,7 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 5 van 6</div>
         <div class="mhdr-title">Vertrouwen, ethiek en verder</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+      <div class="mhdr-time-badge">⏱ 3 minuten</div>
     </div>
     <div class="mhdr-sub">Wanneer mag je een AI vertrouwen? En hoe ver reikt dit idee eigenlijk?</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel weet je:</strong> welke ethische keuzes er zijn gemaakt, wie verantwoordelijk is voor de uitkomst, en hoe hetzelfde principe in jouw eigen sector ingezet kan worden.</div>
@@ -1030,7 +1030,7 @@ p strong{color:var(--text);}
         <div class="mhdr-eyebrow">Onderdeel 6 van 6</div>
         <div class="mhdr-title">Kennischeck</div>
       </div>
-      <div class="mhdr-time-badge">⏱ 5 minuten</div>
+      <div class="mhdr-time-badge">⏱ 2 minuten</div>
     </div>
     <div class="mhdr-sub">Test wat je hebt onthouden in 5 vragen.</div>
     <div class="mhdr-goal"><strong>Na dit onderdeel heb je gecontroleerd</strong> of je de kernprincipes van het systeem kunt benoemen en toepassen.</div>
@@ -1125,9 +1125,56 @@ p strong{color:var(--text);}
       <div class="val-row"><div class="val-key">Auteur</div><div class="val-val">Ertugrul Demirci, BIM Groep 10, Avans Hogeschool</div></div>
       <div class="val-row"><div class="val-key">AI-model</div><div class="val-val">DistilBERT (fijngestemd), 87.63% nauwkeurigheid op 47.837 IT-tickets</div></div>
       <div class="val-row"><div class="val-key">Uitlegbaarheid</div><div class="val-val">LIME, per voorspelling</div></div>
-      <div class="val-row"><div class="val-key">Gevalideerd door</div><div class="val-val">[Naam en functie van de persoon die feedback heeft gegeven]</div></div>
-      <div class="val-row"><div class="val-key">Feedback ontvangen</div><div class="val-val">[Vul in na het validatiegesprek]</div></div>
-      <div class="val-row"><div class="val-key">Aangepast op basis van feedback</div><div class="val-val">[Wat is verbeterd]</div></div>
+
+      <div style="border-top:1px solid var(--border);margin:14px 0;"></div>
+      <div style="font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:12px;">Validatie door doelgroep</div>
+
+      <!-- Validator 1 -->
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:10px;border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div style="font-size:13.5px;font-weight:700;color:var(--text);">Andy Soeung</div>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--muted);">BIM-medestudent</div>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:6px;"><strong style="color:var(--green);">Positief:</strong> De persona (Lena) maakt het verhaal duidelijk en makkelijk te volgen. Goede structuur en de quiz is een leuke manier om te testen wat je hebt geleerd.</div>
+        <div style="font-size:13px;color:var(--muted);">
+          <strong style="color:var(--amber);">Tips:</strong> Op sommige pagina&#39;s staat veel tekst. Simulatie is het leukste onderdeel maar voelt nog oppervlakkig. Als Lena zou hij liever willen zien hoe hij het systeem gebruikt in zijn werk, minder technische achtergrond.
+        </div>
+      </div>
+
+      <!-- Validator 2 -->
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:10px;border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div style="font-size:13.5px;font-weight:700;color:var(--text);">Ayman Lamou</div>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--muted);">BIM-medestudent</div>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:6px;"><strong style="color:var(--green);">Positief:</strong> Duidelijk zonder AI-kennis. Lena als rode draad werkt goed. De vergelijking van DistilBERT met een belezen collega snap je meteen. Niks te technisch. Sterk product, de boodschap dat de mens altijd zelf beslist is goed doorgekomen.</div>
+        <div style="font-size:13px;color:var(--muted);">
+          <strong style="color:var(--amber);">Tips:</strong> De pagina&#39;s komen op sommige plekken druk over met veel info en blokken onder elkaar. Meer rust en ruimte zou de inhoud beter laten landen.
+        </div>
+      </div>
+
+      <!-- Validator 3 -->
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:16px;border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div style="font-size:13.5px;font-weight:700;color:var(--text);">Othman Tebbaa</div>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--muted);">BIM-medestudent</div>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:6px;"><strong style="color:var(--green);">Positief:</strong> Uitleg over het algemeen duidelijk en goed te volgen. Begrippen werden simpel uitgelegd. Wist niet dat AI op een servicedesk op zoveel manieren ingezet kan worden.</div>
+        <div style="font-size:13px;color:var(--muted);">
+          <strong style="color:var(--amber);">Tips:</strong> Sommige stukken voelden herhalend aan. Meer praktijkvoorbeelden toevoegen zodat je beter ziet hoe AI daadwerkelijk gebruikt wordt op een IT-servicedesk.
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);margin:4px 0 14px;"></div>
+      <div style="font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:10px;">Wat is aangepast op basis van de feedback</div>
+
+      <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;font-weight:700;">&#10003;</span><span><strong style="color:var(--text);">Meer ruimte en minder drukte</strong> (feedback Ayman + Andy): de opmaak is aangepast met meer witruimte tussen secties en kaarten zodat de inhoud beter te verwerken is.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;font-weight:700;">&#10003;</span><span><strong style="color:var(--text);">Praktijkvoorbeelden toegevoegd</strong> (feedback Othman): onderdeel 5 bevat zes concrete toepassingen in andere sectoren, van KLM tot ziekenhuizen en gemeenten.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;font-weight:700;">&#10003;</span><span><strong style="color:var(--text);">Toelichting bij de simulatie</strong> (feedback Andy): er staat een uitleg bij de simulatie dat het om een vereenvoudigde versie gaat, omdat het echte DistilBERT-model lokaal draait en niet in een browser kan worden ingebouwd.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--muted);flex-shrink:0;">&#9675;</span><span><strong style="color:var(--text);">Technische achtergrond niet verwijderd</strong> (feedback Andy): de opdracht vereist dat uitgelegd wordt hoe de AI werkt en welke keuzes zijn gemaakt. Die uitleg is bewust aanwezig en is afgestemd op een breed publiek via de toegankelijke taal en de analogie van de belezen collega.</span></div>
+      </div>
+
     </div>
   </div>
 </section>
