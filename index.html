@@ -379,7 +379,7 @@ p strong{color:var(--text);}
     <div class="sb-name">AI op de IT-servicedesk</div>
   </div>
   <div class="sb-prog-wrap">
-    <div class="sb-prog-label"><span>Voortgang</span><span id="ptxt">0 / 6</span></div>
+    <div class="sb-prog-label"><span>Voortgang</span><span id="ptxt">0 / 7</span></div>
     <div class="sb-prog-track"><div class="sb-prog-fill" id="pfill"></div></div>
   </div>
   <div class="sb-total-time">Basis: ~15 min | Verdiepend: +20 min</div>
@@ -543,20 +543,26 @@ p strong{color:var(--text);}
     <div class="flow-v">
       <div class="frow">
         <div class="fleft"><div class="fcircle">1</div><div class="fline"></div></div>
-        <div class="fbody"><h4>Een medewerker stuurt een melding in</h4><p>Ze schrijven in gewone taal wat er mis is. "Mijn laptop start niet op" of "Ik kan niet inloggen op het systeem."</p></div>
+        <div class="fbody"><h4>Een medewerker stuurt een melding in</h4><p>Ze schrijven in gewone taal wat er mis is en kiezen daarbij zelf een categorie uit een lijst. Klinkt handig, maar in de praktijk is die keuze vaak een snelle klik op de eerste optie die er redelijk uitziet. Of ze kiezen "Overig" omdat ze er niet over na willen denken.</p></div>
       </div>
       <div class="frow">
         <div class="fleft"><div class="fcircle">2</div><div class="fline"></div></div>
-        <div class="fbody"><h4>Lena en haar collega's lezen alles handmatig</h4><p>Ze kiezen zelf een categorie: Hardware, Software, Netwerk, Toegang. Maar het is niet altijd duidelijk. Bij twijfel kiezen ze iets, en soms is dat de verkeerde keuze.</p></div>
+        <div class="fbody"><h4>Lena en haar collega's lezen alles handmatig</h4><p>Ze kiezen zelf de juiste categorie: Hardware, Access, HR Support, Purchase... Maar het is niet altijd duidelijk welke het is. Bij twijfel kiezen ze de eerste die er redelijk uitziet, en soms is dat de verkeerde.</p></div>
       </div>
       <div class="frow">
         <div class="fleft"><div class="fcircle">3</div><div class="fline"></div></div>
-        <div class="fbody"><h4>Ticket belandt bij de verkeerde afdeling</h4><p>De netwerkafdeling krijgt een ticket dat eigenlijk voor de softwareafdeling was. Die stuurt het door. Nog meer vertraging.</p></div>
+        <div class="fbody"><h4>Ticket belandt bij de verkeerde afdeling</h4><p>De Hardware-afdeling krijgt een ticket dat eigenlijk voor Access-beheer was. Die stuurt het door. Nog meer vertraging.</p></div>
       </div>
       <div class="frow">
         <div class="fleft"><div class="fcircle">!</div></div>
         <div class="fbody"><h4>Dit herhaalt zich 200 keer per dag bij LogiPro</h4><p>Elke werkdag opnieuw. Dat telt op.</p></div>
       </div>
+    </div>
+
+    <div class="callout c-amber" style="margin-bottom:28px;">
+      <strong>Maar wacht, kiezen mensen zelf niet al een categorie?</strong><br>
+      Ja, dat klopt. De meeste ticketsystemen vragen de medewerker om bij het insturen een categorie aan te vinken. Maar die keuze klopt zelden. Iemand beschrijft in haast wat er mis is en klikt dan op de eerste categorie die er logisch uitziet. Of ze weten het niet zeker en kiezen iets in de buurt. Soms kiezen ze gewoon Miscellaneous omdat dat altijd wel ergens op slaat.<br><br>
+      Het gevolg: de tekst van het ticket zegt iets anders dan de categorie die eraan hangt. Lena moet het ticket dus toch handmatig lezen om te bepalen wat het echt is. De categorie die de medewerker heeft aangeklikt is het startpunt, maar zelden het juiste antwoord. Dat is precies waar de AI op inspeelt: die leest de tekst, niet de aangevinkte categorie.
     </div>
 
     <h2 class="sh">Hoeveel tijd kost dit eigenlijk?</h2>
@@ -589,7 +595,7 @@ p strong{color:var(--text);}
       <div class="card top-green" style="margin:0;">
         <div style="font-size:28px;margin-bottom:10px;">🏛️</div>
         <h3 class="ch" style="font-size:13.5px;">Gemeente</h3>
-        <p style="font-size:13px;">Een ambtenaar kan niet inloggen op het burgersysteem. Het ticket gaat naar software, maar het is een wachtwoordprobleem. Een uur later is het doorgestuurd, maar de burger wacht al.</p>
+        <p style="font-size:13px;">Een ambtenaar kan niet inloggen op het burgersysteem. Het ticket gaat naar de verkeerde afdeling, maar het is een wachtwoordprobleem dat thuis hoort bij Administrative Rights. Een uur later is het doorgestuurd, maar de burger wacht al.</p>
       </div>
     </div>
     <div style="font-size:12.5px;color:var(--muted);text-align:center;padding:8px 0 16px;">Dit zijn geen verzonnen situaties. Dit is de dagelijkse realiteit bij duizenden organisaties in Nederland.</div>
@@ -633,7 +639,7 @@ p strong{color:var(--text);}
     <div class="story">
       <div class="story-char">👩‍💻</div>
       <div class="story-tag">Lena stelt zich iets voor</div>
-      <p>"Stel je voor dat ik een assistent zou hebben die elk binnenkomend ticket in een oogwenk leest en zegt: 'Dit is waarschijnlijk een Netwerk-probleem.' Ik hoef het alleen nog maar te bevestigen of aan te passen. Dat zou mij minstens een uur per dag schelen."</p>
+      <p>"Stel je voor dat ik een assistent zou hebben die elk binnenkomend ticket in een oogwenk leest en zegt: 'Dit lijkt op een Hardware-probleem.' Ik hoef het alleen nog maar te bevestigen of aan te passen. Dat zou mij minstens een uur per dag schelen."</p>
       <p>"Dat is precies wat dit systeem doet."</p>
     </div>
 
@@ -655,23 +661,23 @@ p strong{color:var(--text);}
         <text x="32" y="60" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook crasht bij het openen"</text>
         <text x="32" y="74" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Woord gevonden: Outlook</text>
         <rect x="220" y="50" width="58" height="20" rx="4" fill="#dbeafe"/>
-        <text x="249" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
+        <text x="249" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">ACCESS</text>
         <!-- Ticket 2 -->
         <rect x="22" y="88" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
         <text x="32" y="104" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook: toegang geweigerd"</text>
         <text x="32" y="118" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Woord gevonden: Outlook</text>
         <rect x="220" y="94" width="58" height="20" rx="4" fill="#dbeafe"/>
-        <text x="249" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
-        <text x="155" y="160" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="12" fill="#b91c1c">Ticket 2 had Access moeten zijn.</text>
+        <text x="249" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">ACCESS</text>
+        <text x="155" y="160" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="12" fill="#b91c1c">Ticket 1 had Miscellaneous moeten zijn.</text>
         <text x="155" y="177" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#b91c1c">Maar het systeem zag alleen "Outlook".</text>
         <!-- Right column: AI -->
         <rect x="340" y="10" width="290" height="180" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
         <text x="485" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#027a48" font-weight="700" letter-spacing="1">AI-MODEL</text>
         <rect x="352" y="44" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
         <text x="362" y="60" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook crasht bij het openen"</text>
-        <text x="362" y="74" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Begrijpt: crash = programma</text>
-        <rect x="548" y="50" width="58" height="20" rx="4" fill="#dbeafe"/>
-        <text x="577" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1e40af" font-weight="700">SOFTWARE</text>
+        <text x="362" y="74" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Begrijpt: crash = app-probleem</text>
+        <rect x="548" y="50" width="74" height="20" rx="4" fill="#f3f4f6"/>
+        <text x="585" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#374151" font-weight="700">MISC.</text>
         <rect x="352" y="88" width="266" height="36" rx="6" fill="white" stroke="#e5e7eb" stroke-width="1"/>
         <text x="362" y="104" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="#374151">"Outlook: toegang geweigerd"</text>
         <text x="362" y="118" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b7280">Begrijpt: toegang geweigerd = access</text>
@@ -684,7 +690,7 @@ p strong{color:var(--text);}
 
     <h2 class="sh">De 8 soorten tickets die het systeem herkent</h2>
     <div class="card">
-      <p style="margin-bottom:14px;">Elk ticket krijgt precies een van deze labels:</p>
+      <p style="margin-bottom:14px;">Elk ticket krijgt precies een van deze labels. Kijk hoe divers het is:</p>
       <div style="display:flex;flex-wrap:wrap;gap:8px;">
         <span class="cb hw">🖥 Hardware</span>
         <span class="cb hr">📋 HR Support</span>
@@ -698,6 +704,11 @@ p strong{color:var(--text);}
       <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:7px;">
         <div style="font-size:13px;color:var(--muted);">
           <strong style="color:var(--text);">Voorbeeld.</strong> "Mijn laptop start niet meer op na de update" gaat naar <span class="cb hw" style="margin:0 3px;">Hardware</span>. "Ik wil een licentie aanvragen voor Adobe" gaat naar <span class="cb pur" style="margin:0 3px;">Purchase</span>. "Ik wil twee weken vakantie opnemen" gaat naar <span class="cb hr" style="margin:0 3px;">HR Support</span>. De AI ziet het verschil, ook als jij het snel intypt.
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12.5px;color:var(--muted);margin-top:10px;">
+          <strong style="color:var(--text);">Twee categorie&#235;n die wat uitleg verdienen:</strong><br><br>
+          &#128202; <strong style="color:var(--text);">Internal Project</strong> &mdash; tickets die te maken hebben met een intern IT-project. Denk aan: &#8220;Ik ben toegevoegd aan het implementatieproject maar heb nog geen toegang tot de projectomgeving.&#8221;<br><br>
+          &#128100; <strong style="color:var(--text);">Administrative Rights</strong> &mdash; verzoeken voor verhoogde systeemrechten. Denk aan: &#8220;Ik heb adminrechten nodig om software te mogen installeren op mijn werkplek.&#8221;
         </div>
       </div>
     </div>
@@ -1399,7 +1410,7 @@ p strong{color:var(--text);}
       <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;gap:10px;"><span style="color:var(--teal);flex-shrink:0;font-weight:700;">+</span><span><strong style="color:var(--text);">Verdiepend onderdeel 7</strong>: naast de toegankelijke uitleg voor een breed publiek wilde ik ook iets maken voor mensen die verder willen gaan dan de basis. Onderdeel 7 neemt je stap voor stap mee door het echte notebook: de ruwe data, de trainingsgrafieken, de classificatierapporten en de volledige code. Zo kun je zelf zien hoe het model precies is gebouwd en de resultaten reproduceren. Dit sluit ook aan op de leeruitkomst die vraagt dat de AI-toepassing en het kennisproduct elkaar inhoudelijk versterken.</span></div>
         <div style="display:flex;gap:10px;"><span style="color:var(--teal);flex-shrink:0;font-weight:700;">+</span><span><strong style="color:var(--text);">Link naar werkend model</strong>: het notebook en de bijbehorende code zijn beschikbaar via GitHub, zodat iedereen de resultaten kan inzien en reproduceren. &#128279; <a href="https://github.com/kegdemirci98/Kennisproduct-SBMAI/blob/main/IT-servicedesktickets.ipynb" target="_blank" style="color:var(--teal);">github.com/kegdemirci98/Kennisproduct-SBMAI</a></span></div>
-        <div style="display:flex;gap:10px;"><span style="color:var(--teal);flex-shrink:0;font-weight:700;">+</span><span><strong style="color:var(--text);">Correcte categorienamen</strong>: de dataset bevat Access, Administrative rights, HR Support, Hardware, Internal Project, Miscellaneous, Purchase en Storage. Onjuiste vermeldingen van Software en Network zijn gecorrigeerd.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--teal);flex-shrink:0;font-weight:700;">+</span><span><strong style="color:var(--text);">Inhoudscorrecties en leesbaarheid</strong>: onjuiste categorienamen (Software, Netwerk) zijn vervangen door de werkelijke acht categorie&#235;n. Onduidelijke termen als Internal Project en Administrative Rights zijn voorzien van een korte toelichting. Vooraf mogelijke lezersverwarring is weggenomen met een uitleg over waarom de AI nog nodig is ook al kiezen medewerkers zelf al een categorie bij het insturen van een ticket.</span></div>
         <div style="display:flex;gap:10px;"><span style="color:var(--teal);flex-shrink:0;font-weight:700;">+</span><span><strong style="color:var(--text);">Herkenbare dagelijkse voorbeelden bij DistilBERT</strong>: Gmail-tabs, spamfilter, autocorrectie en bankfraude als voorbeelden van hetzelfde principe in de dagelijkse omgeving van de lezer.</span></div>
       </div>
 
